@@ -15,7 +15,7 @@ class GameScene: SKScene {
     
     public static var tiles = [Tile]()
     
-    public static var pairedTiles = [Int]()
+    public static var pairedTiles = [SKNode]()
     
     public static var chosenNode1 : SKNode!
     public static var chosenNode2 : SKNode!

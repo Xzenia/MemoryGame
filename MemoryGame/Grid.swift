@@ -32,6 +32,7 @@ class Grid:SKSpriteNode {
         guard let context = UIGraphicsGetCurrentContext() else {
             return nil
         }
+        
         let bezierPath = UIBezierPath()
         let offset:CGFloat = 0.5
         // Draw vertical lines
@@ -72,8 +73,7 @@ class Grid:SKSpriteNode {
             let node = atPoint(position)
             
             if node != self {
-                
-                if (!GameScene.pairedTiles.contains(Int(node.name!)!)){
+                if (!GameScene.pairedTiles.contains(node)){
                     let tileTexture = GameScene.tiles[Int(node.name!)!].tile
                     let action = SKAction.setTexture(tileTexture)
                     node.run(action)
@@ -85,7 +85,6 @@ class Grid:SKSpriteNode {
                     }
                 }
 
-                
                 if (GameScene.chosenNode1 != nil && GameScene.chosenNode2 != nil){
                     if (GameScene.chosenNode1 == GameScene.chosenNode2){
                         print("Selected the same node!")
@@ -93,8 +92,8 @@ class Grid:SKSpriteNode {
                         setSelectedNodesToNil()
                     } else if (GameScene.tiles[Int(GameScene.chosenNode1.name!)!].tile == GameScene.tiles[Int(GameScene.chosenNode2.name!)!].tile){
                         print("Both tiles are similar!")
-                        GameScene.pairedTiles.append(Int(GameScene.chosenNode1.name!)!)
-                        GameScene.pairedTiles.append(Int(GameScene.chosenNode2.name!)!)
+                        GameScene.pairedTiles.append(GameScene.chosenNode1)
+                        GameScene.pairedTiles.append(GameScene.chosenNode2)
                         setSelectedNodesToNil()
                     } else {
                         print("Both tiles are not similar!")
