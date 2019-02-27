@@ -72,15 +72,19 @@ class Grid:SKSpriteNode {
             let node = atPoint(position)
             
             if node != self {
-                let tileTexture = GameScene.tiles[Int(node.name!)!].tile
-                let action = SKAction.setTexture(tileTexture)
-                node.run(action)
                 
-                if (GameScene.chosenNode1 == nil){
-                    GameScene.chosenNode1 = node
-                } else {
-                    GameScene.chosenNode2 = node
+                if (!GameScene.pairedTiles.contains(Int(node.name!)!)){
+                    let tileTexture = GameScene.tiles[Int(node.name!)!].tile
+                    let action = SKAction.setTexture(tileTexture)
+                    node.run(action)
+                    
+                    if (GameScene.chosenNode1 == nil){
+                        GameScene.chosenNode1 = node
+                    } else {
+                        GameScene.chosenNode2 = node
+                    }
                 }
+
                 
                 if (GameScene.chosenNode1 != nil && GameScene.chosenNode2 != nil){
                     if (GameScene.chosenNode1 == GameScene.chosenNode2){
