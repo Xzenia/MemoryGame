@@ -48,7 +48,7 @@ class Grid:SKSpriteNode {
             bezierPath.addLine(to: CGPoint(x: size.width, y: y))
         }
         
-        SKColor.white.setStroke()
+        SKColor.black.setStroke()
         bezierPath.lineWidth = 1.0
         bezierPath.stroke()
         context.addPath(bezierPath.cgPath)
@@ -73,7 +73,7 @@ class Grid:SKSpriteNode {
             let node = atPoint(position)
             
             if node != self {
-                if (!GameScene.pairedTiles.contains(node)){
+                if (!GameScene.pairedTiles.contains(node) && GameScene.turns > 0 && GameScene.gameStarted){
                     let tileTexture = GameScene.tiles[Int(node.name!)!].tile
                     let action = SKAction.setTexture(tileTexture)
                     node.run(action)
@@ -95,15 +95,24 @@ class Grid:SKSpriteNode {
                         GameScene.pairedTiles.append(GameScene.chosenNode1)
                         GameScene.pairedTiles.append(GameScene.chosenNode2)
                         setSelectedNodesToNil()
+                        
+                        GameScene.turns -= 1
+                        
+                        GameScene.gold += 1
+                        print("Turns: \(GameScene.turns)")
                     } else {
                         print("Both tiles are not similar!")
-                        let wait = SKAction.wait(forDuration: 2)
+                        let wait = SKAction.wait(forDuration: 1)
                         let run = SKAction.run {
                             self.changeTilesToDefault()
                             self.setSelectedNodesToNil()
+                            GameScene.turns -= 1
+                            
+                            print("Turns: \(GameScene.turns)")
                         }
                         self.run(SKAction.sequence([wait, run]))
                     }
+
                 }
                 
             } else {
