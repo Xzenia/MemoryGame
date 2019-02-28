@@ -106,8 +106,9 @@ class Grid:SKSpriteNode {
                         let run = SKAction.run {
                             self.changeTilesToDefault()
                             self.setSelectedNodesToNil()
-                            GameScene.turns -= 1
-                            
+                            GameScene.turns -= 1                            
+                            GameScene.health -= 10
+
                             print("Turns: \(GameScene.turns)")
                         }
                         self.run(SKAction.sequence([wait, run]))

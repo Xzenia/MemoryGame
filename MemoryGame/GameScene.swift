@@ -26,6 +26,8 @@ class GameScene: SKScene {
     
     public static var gold = 0
     
+    public static var health = CGFloat(100)
+    
     public static var gameStarted = false
     
     let rows: Int = 5
@@ -83,6 +85,9 @@ class GameScene: SKScene {
             self.run(SKAction.sequence([wait, run]))
         }
         
+        if (GameScene.health > 0){
+            healthBarAmount.xScale = GameScene.health/100
+        }
         goldCounterLabel.text = String(GameScene.gold)
     }
     
@@ -99,7 +104,9 @@ class GameScene: SKScene {
         addChild(healthBar)
         
         healthBarAmount.zPosition = 3
-        healthBarAmount.position = CGPoint(x: frame.size.width / 3.3, y: frame.size.height/2)
+        healthBarAmount.xScale = GameScene.health/100
+        healthBarAmount.position = CGPoint(x: frame.size.width / 25, y: frame.size.height/2)
+        healthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(healthBarAmount)
         
         goldCounterIcon.zPosition = 3

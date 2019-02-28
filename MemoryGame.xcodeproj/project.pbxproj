@@ -18,7 +18,7 @@
 		E508E76722262E3400145551 /* MemoryGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E508E76622262E3400145551 /* MemoryGameUITests.swift */; };
 		E508E77522262F4600145551 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = E508E77422262F4600145551 /* Grid.swift */; };
 		E508E77722262F5C00145551 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E508E77622262F5C00145551 /* Tile.swift */; };
-		E5DC8ECC2227F0C000780D2A /* Eightbitdragon.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5DC8ECB2227F0C000780D2A /* Eightbitdragon.otf */; };
+		E5D5BAB92228050B0098E45A /* Eightbitdragon.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5D5BAB82228050B0098E45A /* Eightbitdragon.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +56,7 @@
 		E508E76822262E3400145551 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E508E77422262F4600145551 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		E508E77622262F5C00145551 /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
-		E5DC8ECB2227F0C000780D2A /* Eightbitdragon.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Eightbitdragon.otf; path = "../../../../Desktop/Memory_Game_(2-28-19)_(2-27-19_build)/MemoryGame/Eightbitdragon.otf"; sourceTree = "<group>"; };
+		E5D5BAB82228050B0098E45A /* Eightbitdragon.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Eightbitdragon.otf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,7 +143,7 @@
 		E5DC8ECD2227F0C300780D2A /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				E5DC8ECB2227F0C000780D2A /* Eightbitdragon.otf */,
+				E5D5BAB82228050B0098E45A /* Eightbitdragon.otf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -257,7 +257,7 @@
 			files = (
 				E508E74C22262E3400145551 /* Main.storyboard in Resources */,
 				E508E74E22262E3400145551 /* Assets.xcassets in Resources */,
-				E5DC8ECC2227F0C000780D2A /* Eightbitdragon.otf in Resources */,
+				E5D5BAB92228050B0098E45A /* Eightbitdragon.otf in Resources */,
 				E508E75122262E3400145551 /* LaunchScreen.storyboard in Resources */,
 				E508E74522262E3400145551 /* Actions.sks in Resources */,
 			);
