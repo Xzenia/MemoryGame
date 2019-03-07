@@ -220,7 +220,6 @@ class GameScene: SKScene {
         GameScene.chosenNode1 = nil
         GameScene.chosenNode2 = nil
         
-        grid.removeAllChildren()
     }
     
     func beginEnemyTurn(){
@@ -275,12 +274,14 @@ class GameScene: SKScene {
     func generateGridContents(revealTiles: Bool){
         var x = 1
         var counter = 0
-
+        
+        var tileSprite: SKSpriteNode!
+        
+        grid.removeAllChildren()
+        
         while x <= rows {
             var y = 0
             while y < cols {
-                let tileSprite: SKSpriteNode!
-                
                 if (revealTiles){
                     tileSprite = SKSpriteNode(texture: GameScene.tiles[counter].tile)
                 } else {
