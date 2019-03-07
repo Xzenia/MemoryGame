@@ -11,8 +11,6 @@ import SpriteKit
 
 class GameScene: SKScene {
     
-    public static let tileSpriteList = [SKTexture(imageNamed: "tile_1"), SKTexture(imageNamed: "tile_6"), SKTexture(imageNamed: "tile_10"), SKTexture(imageNamed: "tile_15")]
-    
     public static var tiles = [Tile]()
     
     public static var pairedTiles = [SKNode]()
@@ -26,14 +24,12 @@ class GameScene: SKScene {
     
     public static var gold = 0
     
-    public static var health = Float(100)
-    
     public static var gameStarted = false
     
-    public static var enemyHealth = Float(150)
-    
-    public static var playerBaseAttackDamage = Float(10)
-    
+    public static var enemyHealth = Float(100)
+    public static var enemyAttackStat = Float(15)
+    public static var enemyDefenseStat = Float(8)
+        
     let rows: Int = 5
     let cols: Int = 5
     
@@ -50,10 +46,16 @@ class GameScene: SKScene {
     let enemyHealthBarAmount = SKSpriteNode(imageNamed: "enemy_health_bar_amount")
     
     
+    var chosenOffenseTile : Int = 0
+    var chosenDefenseTile : Int = 0
+    var chosenHealingTile : Int = 0
+    
+    var chosenTiles = [SKTexture]()
+    
     override func didMove(to view: SKView) {
         
         setupUI()
-    
+        
         grid = Grid(blockSize: 40.0, rows:rows, cols:cols)!
         grid.position = CGPoint (x:frame.midX, y:frame.midY/2)
         grid.zPosition = 3
@@ -82,12 +84,13 @@ class GameScene: SKScene {
             
             playerTurnEnded()
             beginEnemyTurn()
+            Player.revertToBaseValues()
             generateTiles()
             generateGridContents(revealTiles: true)
             
             GameScene.gameStarted = false
             
-            let wait = SKAction.wait(forDuration: 5)
+            let wait = SKAction.wait(forDuration: 3)
             let run = SKAction.run {
                 self.generateGridContents(revealTiles: false)
                 GameScene.gameStarted = true
@@ -95,15 +98,15 @@ class GameScene: SKScene {
             self.run(SKAction.sequence([wait, run]))
         }
         
-        if (GameScene.health > 0){
-            healthBarAmount.xScale = CGFloat(GameScene.health)/100
+        if (Player.health > 0){
+            healthBarAmount.xScale = CGFloat(Player.health)/100
         } else {
             GameScene.gameStarted = false
             print("Game over!")
         }
         
         if (GameScene.enemyHealth > 0){
-            enemyHealthBarAmount.xScale = CGFloat(GameScene.enemyHealth)/150
+            enemyHealthBarAmount.xScale = CGFloat(GameScene.enemyHealth)/100
         } else {
             GameScene.gameStarted = true
             print ("You win!")
@@ -124,7 +127,7 @@ class GameScene: SKScene {
         addChild(healthBar)
         
         healthBarAmount.zPosition = 3
-        healthBarAmount.xScale = CGFloat(GameScene.health) / CGFloat(GameScene.health)
+        healthBarAmount.xScale = CGFloat(Player.health) / CGFloat(Player.health)
         healthBarAmount.position = CGPoint(x: frame.size.width / 25, y: frame.size.height/2)
         healthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(healthBarAmount)
@@ -153,12 +156,62 @@ class GameScene: SKScene {
     
     
     func playerTurnEnded(){
+        
+        for tile in GameScene.pairedTiles{
+            let pairedTile = GameScene.tiles[Int(tile.name!)!]
+            
+            if (pairedTile.tileType == TileType.offense){
+                switch pairedTile.effectId {
+                case 0:
+                    TileController.increaseAttackStat(increase: 10)
+                case 1:
+                    TileController.increaseAttackStat(increase: 20)
+                case 2:
+                    TileController.increaseAttackStat(increase: 30)
+                case 3:
+                    TileController.increaseAttackStat(increase: 40)
+                default:
+                    TileController.increaseAttackStat(increase: 10)
+                }
+            }
+            else if(pairedTile.tileType == TileType.defense){
+                switch pairedTile.effectId {
+                case 0:
+                    TileController.increaseDefenseStat(increase: 10)
+                case 1:
+                    TileController.increaseDefenseStat(increase: 20)
+                case 2:
+                    TileController.increaseDefenseStat(increase: 30)
+                case 3:
+                    TileController.increaseDefenseStat(increase: 40)
+                default:
+                    TileController.increaseDefenseStat(increase: 10)
+                }
+            }
+            else if (pairedTile.tileType == TileType.healing){
+                switch pairedTile.effectId {
+                case 0:
+                    TileController.increasePlayerHealth(increase: 10)
+                case 1:
+                    TileController.increasePlayerHealth(increase: 20)
+                case 2:
+                    TileController.increasePlayerHealth(increase: 30)
+                case 3:
+                    TileController.increasePlayerHealth(increase: 40)
+                default:
+                    TileController.increasePlayerHealth(increase: 10)
+                }
+            }
+        }
+        print("Player attack stat: \(Player.attackStat)")
+        print("Player defense stat: \(Player.defenseStat)")
+        
+        GameScene.enemyHealth -= (Player.attackStat * (GameScene.enemyDefenseStat/100))
+        
         let action = SKAction.setTexture(GameScene.defaultTile)
         for tile in GameScene.pairedTiles{
             tile.run(action)
         }
-        
-        GameScene.enemyHealth -= GameScene.playerBaseAttackDamage
         
         GameScene.turns = 3
         GameScene.pairedTiles = [SKNode]()
@@ -171,21 +224,47 @@ class GameScene: SKScene {
     }
     
     func beginEnemyTurn(){
-        let playerDamage = Float(arc4random_uniform(UInt32(GameScene.health * 0.50)) + UInt32(GameScene.health * 0.05))
-        
-        GameScene.health -= playerDamage
+        Player.health -= (GameScene.enemyAttackStat * (Player.defenseStat/100))
     }
     
     
     func generateTiles(){
         var x = 1
         var counter = 0
+
+        chosenOffenseTile = Int(arc4random_uniform(UInt32(TileController.offenseTiles.count)))
+        chosenDefenseTile = Int(arc4random_uniform(UInt32(TileController.defenseTiles.count)))
+        chosenHealingTile = Int(arc4random_uniform(UInt32(TileController.healingTiles.count)))
+        
+        chosenTiles = [TileController.offenseTiles[chosenOffenseTile], TileController.defenseTiles[chosenDefenseTile], TileController.healingTiles[chosenHealingTile]]
         
         while x <= rows {
             var y = 0
             while y < cols {
-                let tile = Tile(row: x-1, col: y, id: counter, tile: GameScene.tileSpriteList[Int(arc4random_uniform(UInt32(GameScene.tileSpriteList.count)))])
+                let randomNum = Int(arc4random_uniform(UInt32(chosenTiles.count)))
+                
+                var effectId : Int
+                var tileType: TileType
+                
+                switch randomNum {
+                case 0:
+                    effectId = chosenOffenseTile
+                    tileType = TileType.offense
+                case 1:
+                    effectId = chosenDefenseTile
+                    tileType = TileType.defense
+                case 2:
+                    effectId = chosenHealingTile
+                    tileType = TileType.healing
+                default:
+                    effectId = 0
+                    tileType = TileType.offense
+                }
+                
+                let tile = Tile(row: x-1, col: y, id: counter, effectId: effectId, tileType: tileType, tile: chosenTiles[randomNum])
+                
                 GameScene.tiles.append(tile)
+                
                 counter = counter + 1
                 y = y + 1
             }

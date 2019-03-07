@@ -93,7 +93,6 @@ class Grid:SKSpriteNode {
                     } else if (GameScene.tiles[Int(GameScene.chosenNode1.name!)!].tile == GameScene.tiles[Int(GameScene.chosenNode2.name!)!].tile){
                         print("Both tiles are similar!")
                         GameScene.pairedTiles.append(GameScene.chosenNode1)
-                        GameScene.pairedTiles.append(GameScene.chosenNode2)
                         setSelectedNodesToNil()
                         
                         GameScene.turns -= 1
