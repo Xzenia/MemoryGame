@@ -26,9 +26,13 @@ class GameScene: SKScene {
     
     public static var gold = 0
     
-    public static var health = CGFloat(100)
+    public static var health = Float(100)
     
     public static var gameStarted = false
+    
+    public static var enemyHealth = Float(150)
+    
+    public static var playerBaseAttackDamage = Float(10)
     
     let rows: Int = 5
     let cols: Int = 5
@@ -41,6 +45,10 @@ class GameScene: SKScene {
     let healthBarAmount = SKSpriteNode(imageNamed: "health_bar_amount")
     let goldCounterIcon = SKSpriteNode(imageNamed: "coin_icon")
     let goldCounterLabel = SKLabelNode(fontNamed: "Eight Bit Dragon")
+    
+    let enemyHealthBar = SKSpriteNode(imageNamed: "enemy_health_bar")
+    let enemyHealthBarAmount = SKSpriteNode(imageNamed: "enemy_health_bar_amount")
+    
     
     override func didMove(to view: SKView) {
         
@@ -73,10 +81,12 @@ class GameScene: SKScene {
         if (GameScene.turns <= 0){
             
             playerTurnEnded()
+            beginEnemyTurn()
             generateTiles()
             generateGridContents(revealTiles: true)
             
             GameScene.gameStarted = false
+            
             let wait = SKAction.wait(forDuration: 5)
             let run = SKAction.run {
                 self.generateGridContents(revealTiles: false)
@@ -86,7 +96,17 @@ class GameScene: SKScene {
         }
         
         if (GameScene.health > 0){
-            healthBarAmount.xScale = GameScene.health/100
+            healthBarAmount.xScale = CGFloat(GameScene.health)/100
+        } else {
+            GameScene.gameStarted = false
+            print("Game over!")
+        }
+        
+        if (GameScene.enemyHealth > 0){
+            enemyHealthBarAmount.xScale = CGFloat(GameScene.enemyHealth)/150
+        } else {
+            GameScene.gameStarted = true
+            print ("You win!")
         }
         goldCounterLabel.text = String(GameScene.gold)
     }
@@ -104,7 +124,7 @@ class GameScene: SKScene {
         addChild(healthBar)
         
         healthBarAmount.zPosition = 3
-        healthBarAmount.xScale = GameScene.health/100
+        healthBarAmount.xScale = CGFloat(GameScene.health) / CGFloat(GameScene.health)
         healthBarAmount.position = CGPoint(x: frame.size.width / 25, y: frame.size.height/2)
         healthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(healthBarAmount)
@@ -119,6 +139,16 @@ class GameScene: SKScene {
         goldCounterLabel.text = String(GameScene.gold)
         goldCounterLabel.fontColor = UIColor.black
         addChild(goldCounterLabel)
+        
+        enemyHealthBar.position = CGPoint(x: frame.size.width/2, y: frame.size.height - 20)
+        enemyHealthBar.zPosition = 4
+        addChild(enemyHealthBar)
+        
+        enemyHealthBarAmount.zPosition = 3
+        enemyHealthBarAmount.xScale = CGFloat(GameScene.enemyHealth) / CGFloat(GameScene.enemyHealth)
+        enemyHealthBarAmount.position = CGPoint(x: frame.size.width/4.3, y: frame.size.height - 20)
+        enemyHealthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
+        addChild(enemyHealthBarAmount)
     }
     
     
@@ -128,6 +158,8 @@ class GameScene: SKScene {
             tile.run(action)
         }
         
+        GameScene.enemyHealth -= GameScene.playerBaseAttackDamage
+        
         GameScene.turns = 3
         GameScene.pairedTiles = [SKNode]()
         GameScene.tiles = [Tile]()
@@ -136,6 +168,12 @@ class GameScene: SKScene {
         GameScene.chosenNode2 = nil
         
         grid.removeAllChildren()
+    }
+    
+    func beginEnemyTurn(){
+        let playerDamage = Float(arc4random_uniform(UInt32(GameScene.health * 0.50)) + UInt32(GameScene.health * 0.05))
+        
+        GameScene.health -= playerDamage
     }
     
     

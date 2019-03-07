@@ -107,7 +107,6 @@ class Grid:SKSpriteNode {
                             self.changeTilesToDefault()
                             self.setSelectedNodesToNil()
                             GameScene.turns -= 1                            
-                            GameScene.health -= 10
 
                             print("Turns: \(GameScene.turns)")
                         }
