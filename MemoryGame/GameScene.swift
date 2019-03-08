@@ -207,12 +207,7 @@ class GameScene: SKScene {
         print("Player defense stat: \(Player.defenseStat)")
         
         GameScene.enemyHealth -= (Player.attackStat * (GameScene.enemyDefenseStat/100))
-        
-        let action = SKAction.setTexture(GameScene.defaultTile)
-        for tile in GameScene.pairedTiles{
-            tile.run(action)
-        }
-        
+                
         GameScene.turns = 3
         GameScene.pairedTiles = [SKNode]()
         GameScene.tiles = [Tile]()

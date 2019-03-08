@@ -101,7 +101,7 @@ class Grid:SKSpriteNode {
                         print("Turns: \(GameScene.turns)")
                     } else {
                         print("Both tiles are not similar!")
-                        let wait = SKAction.wait(forDuration: 1)
+                        let wait = SKAction.wait(forDuration: 0.5)
                         let run = SKAction.run {
                             self.changeTilesToDefault()
                             self.setSelectedNodesToNil()
