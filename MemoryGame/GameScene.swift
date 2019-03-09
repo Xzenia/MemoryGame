@@ -29,7 +29,7 @@ class GameScene: SKScene {
     public static var enemyHealth = Float(100)
     public static var enemyAttackStat = Float(15)
     public static var enemyDefenseStat = Float(8)
-        
+    
     let rows: Int = 5
     let cols: Int = 5
     
@@ -51,6 +51,9 @@ class GameScene: SKScene {
     var chosenHealingTile : Int = 0
     
     var chosenTiles = [SKTexture]()
+    
+    var playerSprite = SKSpriteNode()
+    var enemySprite = SKSpriteNode()
     
     override func didMove(to view: SKView) {
         
@@ -152,6 +155,11 @@ class GameScene: SKScene {
         enemyHealthBarAmount.position = CGPoint(x: frame.size.width/4.3, y: frame.size.height - 20)
         enemyHealthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(enemyHealthBarAmount)
+        
+        playerSprite = SKSpriteNode(imageNamed: "spr_Shou_idle_0")
+        playerSprite.position = CGPoint(x: frame.size.width/5, y: frame.size.height - 200)
+        playerSprite.zPosition = 5
+        addChild(playerSprite)
     }
     
     
@@ -226,11 +234,16 @@ class GameScene: SKScene {
         var x = 1
         var counter = 0
 
-        chosenOffenseTile = Int(arc4random_uniform(UInt32(TileController.offenseTiles.count)))
-        chosenDefenseTile = Int(arc4random_uniform(UInt32(TileController.defenseTiles.count)))
-        chosenHealingTile = Int(arc4random_uniform(UInt32(TileController.healingTiles.count)))
-        
-        chosenTiles = [TileController.offenseTiles[chosenOffenseTile], TileController.defenseTiles[chosenDefenseTile], TileController.healingTiles[chosenHealingTile]]
+        for _ in 0...2{
+            chosenOffenseTile = Int(arc4random_uniform(UInt32(TileController.offenseTiles.count)))
+            chosenDefenseTile = Int(arc4random_uniform(UInt32(TileController.defenseTiles.count)))
+            chosenHealingTile = Int(arc4random_uniform(UInt32(TileController.healingTiles.count)))
+            
+            chosenTiles.append(TileController.offenseTiles[chosenOffenseTile])
+            chosenTiles.append(TileController.defenseTiles[chosenDefenseTile])
+            chosenTiles.append(TileController.healingTiles[chosenHealingTile])
+        }
+
         
         while x <= rows {
             var y = 0
