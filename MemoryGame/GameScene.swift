@@ -51,6 +51,8 @@ class GameScene: SKScene {
     var playerSprite = SKSpriteNode()
     var enemySprite = SKSpriteNode()
     
+    var playerSpriteAnimation: SKAction!
+    
     override func didMove(to view: SKView) {
         
         setupUI()
@@ -112,7 +114,9 @@ class GameScene: SKScene {
             GameScene.gameStarted = false
             print ("You win!")
         }
-    
+        
+
+        
         goldCounterLabel.text = String(GameScene.gold)
     }
     
@@ -155,9 +159,17 @@ class GameScene: SKScene {
         enemyHealthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(enemyHealthBarAmount)
         
+        
+        var playerSprites: [SKTexture] = []
+        for counter in 1...8{
+            playerSprites.append(SKTexture(imageNamed: "spr_Shou_idle_\(counter)"))
+        }
+        playerSpriteAnimation = SKAction.animate(with: playerSprites, timePerFrame: 0.2)
+        
         playerSprite = SKSpriteNode(imageNamed: "spr_Shou_idle_0")
         playerSprite.position = CGPoint(x: frame.size.width/5, y: frame.size.height - 150)
         playerSprite.zPosition = 5
+        playerSprite.run(SKAction.repeatForever(playerSpriteAnimation))
         addChild(playerSprite)
     }
     
