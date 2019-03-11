@@ -21,6 +21,7 @@
 		E57DEAF1223105480071B512 /* TileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57DEAF0223105480071B512 /* TileController.swift */; };
 		E57DEAF3223114970071B512 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57DEAF2223114970071B512 /* Player.swift */; };
 		E57DEAF522311C650071B512 /* TileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57DEAF422311C650071B512 /* TileType.swift */; };
+		E5A96FBD22360F3C0031657D /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A96FBC22360F3C0031657D /* Enemy.swift */; };
 		E5D5BAB92228050B0098E45A /* Eightbitdragon.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5D5BAB82228050B0098E45A /* Eightbitdragon.otf */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,7 @@
 		E57DEAF0223105480071B512 /* TileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileController.swift; sourceTree = "<group>"; };
 		E57DEAF2223114970071B512 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		E57DEAF422311C650071B512 /* TileType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileType.swift; sourceTree = "<group>"; };
+		E5A96FBC22360F3C0031657D /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		E5D5BAB82228050B0098E45A /* Eightbitdragon.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Eightbitdragon.otf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,6 +129,7 @@
 				E57DEAF0223105480071B512 /* TileController.swift */,
 				E57DEAF2223114970071B512 /* Player.swift */,
 				E57DEAF422311C650071B512 /* TileType.swift */,
+				E5A96FBC22360F3C0031657D /* Enemy.swift */,
 			);
 			path = MemoryGame;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				E57DEAF1223105480071B512 /* TileController.swift in Sources */,
 				E508E74922262E3400145551 /* GameViewController.swift in Sources */,
 				E508E77722262F5C00145551 /* Tile.swift in Sources */,
+				E5A96FBD22360F3C0031657D /* Enemy.swift in Sources */,
 				E57DEAF3223114970071B512 /* Player.swift in Sources */,
 				E508E74122262E3400145551 /* AppDelegate.swift in Sources */,
 				E508E77522262F4600145551 /* Grid.swift in Sources */,

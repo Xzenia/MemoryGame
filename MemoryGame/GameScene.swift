@@ -25,11 +25,7 @@ class GameScene: SKScene {
     public static var gold = 0
     
     public static var gameStarted = false
-    
-    public static var enemyHealth = Float(100)
-    public static var enemyAttackStat = Float(15)
-    public static var enemyDefenseStat = Float(8)
-    
+
     let rows: Int = 5
     let cols: Int = 5
     
@@ -102,18 +98,21 @@ class GameScene: SKScene {
         }
         
         if (Player.health > 0){
-            healthBarAmount.xScale = CGFloat(Player.health)/100
-        } else {
+            healthBarAmount.xScale = CGFloat(Player.health)/CGFloat(Player.maxHealth)
+        } else if (Player.health <= 0){
+            healthBarAmount.xScale = CGFloat(Player.health)/CGFloat(Player.maxHealth)
             GameScene.gameStarted = false
             print("Game over!")
         }
         
-        if (GameScene.enemyHealth > 0){
-            enemyHealthBarAmount.xScale = CGFloat(GameScene.enemyHealth)/100
-        } else {
-            GameScene.gameStarted = true
+        if (Enemy.health > 0){
+            enemyHealthBarAmount.xScale = CGFloat(Enemy.health)/CGFloat(Enemy.maxHealth)
+        } else if (Enemy.health <= 0){
+            enemyHealthBarAmount.xScale = CGFloat(Enemy.health)/CGFloat(Enemy.maxHealth)
+            GameScene.gameStarted = false
             print ("You win!")
         }
+    
         goldCounterLabel.text = String(GameScene.gold)
     }
     
@@ -121,7 +120,7 @@ class GameScene: SKScene {
         
         background.size.width = CGFloat(frame.size.width)
         background.size.height = CGFloat(frame.size.height)
-        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 10)
+        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
         background.zPosition = 0
         addChild(background)
         
@@ -151,13 +150,13 @@ class GameScene: SKScene {
         addChild(enemyHealthBar)
         
         enemyHealthBarAmount.zPosition = 3
-        enemyHealthBarAmount.xScale = CGFloat(GameScene.enemyHealth) / CGFloat(GameScene.enemyHealth)
+        enemyHealthBarAmount.xScale = CGFloat(Enemy.health) / CGFloat(Enemy.maxHealth)
         enemyHealthBarAmount.position = CGPoint(x: frame.size.width/4.3, y: frame.size.height - 20)
         enemyHealthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(enemyHealthBarAmount)
         
         playerSprite = SKSpriteNode(imageNamed: "spr_Shou_idle_0")
-        playerSprite.position = CGPoint(x: frame.size.width/5, y: frame.size.height - 200)
+        playerSprite.position = CGPoint(x: frame.size.width/5, y: frame.size.height - 150)
         playerSprite.zPosition = 5
         addChild(playerSprite)
     }
@@ -214,7 +213,7 @@ class GameScene: SKScene {
         print("Player attack stat: \(Player.attackStat)")
         print("Player defense stat: \(Player.defenseStat)")
         
-        GameScene.enemyHealth -= (Player.attackStat * (GameScene.enemyDefenseStat/100))
+        Enemy.health -= (Player.attackStat - (Player.attackStat * (Enemy.defenseStat/100)))
                 
         GameScene.turns = 3
         GameScene.pairedTiles = [SKNode]()
@@ -226,7 +225,7 @@ class GameScene: SKScene {
     }
     
     func beginEnemyTurn(){
-        Player.health -= (GameScene.enemyAttackStat * (Player.defenseStat/100))
+        Player.health -= (Enemy.attackStat - (Enemy.attackStat * (Player.defenseStat/100)))
     }
     
     
