@@ -25,6 +25,8 @@ class GameScene: SKScene {
     public static var gold = 0
     
     public static var gameStarted = false
+    
+    public static var healthPotionActivated = false
 
     let rows: Int = 5
     let cols: Int = 5
@@ -41,6 +43,7 @@ class GameScene: SKScene {
     let enemyHealthBar = SKSpriteNode(imageNamed: "enemy_health_bar")
     let enemyHealthBarAmount = SKSpriteNode(imageNamed: "enemy_health_bar_amount")
     
+    let potionButton = SKSpriteNode(imageNamed: "healing_tile_4")
     
     var chosenOffenseTile : Int = 0
     var chosenDefenseTile : Int = 0
@@ -115,8 +118,6 @@ class GameScene: SKScene {
             print ("You win!")
         }
         
-
-        
         goldCounterLabel.text = String(GameScene.gold)
     }
     
@@ -149,6 +150,10 @@ class GameScene: SKScene {
         goldCounterLabel.fontColor = UIColor.black
         addChild(goldCounterLabel)
         
+        potionButton.zPosition = 3
+        potionButton.position = CGPoint(x: healthBar.position.x * 3.07, y: goldCounterIcon.position.y - 50)
+        addChild(potionButton)
+        
         enemyHealthBar.position = CGPoint(x: frame.size.width/2, y: frame.size.height - 20)
         enemyHealthBar.zPosition = 4
         addChild(enemyHealthBar)
@@ -164,6 +169,7 @@ class GameScene: SKScene {
         for counter in 1...8{
             playerSprites.append(SKTexture(imageNamed: "spr_Shou_idle_\(counter)"))
         }
+        
         playerSpriteAnimation = SKAction.animate(with: playerSprites, timePerFrame: 0.2)
         
         playerSprite = SKSpriteNode(imageNamed: "spr_Shou_idle_0")
@@ -171,6 +177,14 @@ class GameScene: SKScene {
         playerSprite.zPosition = 5
         playerSprite.run(SKAction.repeatForever(playerSpriteAnimation))
         addChild(playerSprite)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            if potionButton.contains(touch.location(in: self)){
+                GameScene.healthPotionActivated = true
+            }
+        }
     }
     
     
@@ -222,6 +236,7 @@ class GameScene: SKScene {
                 }
             }
         }
+        
         print("Player attack stat: \(Player.attackStat)")
         print("Player defense stat: \(Player.defenseStat)")
         
@@ -252,8 +267,13 @@ class GameScene: SKScene {
             
             chosenTiles.append(TileController.offenseTiles[chosenOffenseTile])
             chosenTiles.append(TileController.defenseTiles[chosenDefenseTile])
-            chosenTiles.append(TileController.healingTiles[chosenHealingTile])
+            
+            if (GameScene.healthPotionActivated){
+                chosenTiles.append(TileController.healingTiles[chosenHealingTile])
+            }
         }
+        
+        GameScene.healthPotionActivated = false
 
         
         while x <= rows {

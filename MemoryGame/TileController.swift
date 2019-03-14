@@ -26,7 +26,7 @@ class TileController {
     }
     
     public static func increasePlayerHealth (increase: Float){
-        Player.health += increase
+        Player.health = Player.health + increase
     }
     
 
