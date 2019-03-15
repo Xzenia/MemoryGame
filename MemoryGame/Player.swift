@@ -8,23 +8,46 @@
 
 import SpriteKit
 
-class Player {
+struct Player {
     
-    public static var baseAttackStat = Float(10)
+    var baseAttackStat: Float
     
-    public static var baseDefenseStat = Float(5)
+    var baseDefenseStat: Float
     
-    public static var maxHealth = Float(100)
+    var maxHealth: Float
     
-    public static var health = Float(100)
+    var health: Float
     
-    public static var attackStat = Player.baseAttackStat
+    var attackStat: Float
     
-    public static var defenseStat = Player.baseDefenseStat
+    var defenseStat: Float
     
-    public static func revertToBaseValues(){
-        Player.attackStat = Player.baseAttackStat
-        Player.defenseStat = Player.baseDefenseStat
+    
+    init(_baseAttackStat: Float, _baseDefenseStat: Float, _maxHealth: Float) {
+        baseAttackStat = _baseAttackStat
+        baseDefenseStat = _baseDefenseStat
+        maxHealth = _maxHealth
+        
+        health = maxHealth
+        attackStat = baseAttackStat
+        defenseStat = baseDefenseStat
+        
     }
     
+    mutating func revertToBaseValues(){
+        attackStat = baseAttackStat
+        defenseStat = baseDefenseStat
+    }
+    
+    mutating func increaseAttackStat(increase: Float){
+        attackStat += increase
+    }
+    
+    mutating func increaseDefenseStat(increase: Float){
+        defenseStat += increase
+    }
+    
+    mutating func increaseHealth(increase: Float){
+        health += increase
+    }
 }

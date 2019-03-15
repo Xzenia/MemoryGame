@@ -17,18 +17,4 @@ class TileController {
     public static let healingTiles = [SKTexture(imageNamed:"healing_tile_1"), SKTexture(imageNamed:"healing_tile_2"), SKTexture(imageNamed:"healing_tile_3"), SKTexture(imageNamed:"healing_tile_4")]
     
     
-    public static func increaseAttackStat(increase: Float){
-        Player.attackStat = Player.baseAttackStat + increase
-    }
-    
-    public static func increaseDefenseStat(increase: Float){
-        Player.defenseStat = Player.baseDefenseStat + increase
-    }
-    
-    public static func increasePlayerHealth (increase: Float){
-        Player.health = Player.health + increase
-    }
-    
-
-    
 }

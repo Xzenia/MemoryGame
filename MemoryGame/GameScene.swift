@@ -56,7 +56,13 @@ class GameScene: SKScene {
     
     var playerSpriteAnimation: SKAction!
     
+    public var playerStats: Player!
+    public var enemyStats: Enemy!
+    
     override func didMove(to view: SKView) {
+        
+        playerStats = Player(_baseAttackStat: 10, _baseDefenseStat: 8, _maxHealth: 100)
+        enemyStats = Enemy(_enemyName: "Cacodemon", _baseAttackStat: 10, _baseDefenseStat: 8, _maxHealth: 100)
         
         setupUI()
         
@@ -88,7 +94,7 @@ class GameScene: SKScene {
             
             playerTurnEnded()
             beginEnemyTurn()
-            Player.revertToBaseValues()
+            playerStats.revertToBaseValues()
             generateTiles()
             generateGridContents(revealTiles: true)
             
@@ -102,18 +108,18 @@ class GameScene: SKScene {
             self.run(SKAction.sequence([wait, run]))
         }
         
-        if (Player.health > 0){
-            healthBarAmount.xScale = CGFloat(Player.health)/CGFloat(Player.maxHealth)
-        } else if (Player.health <= 0){
-            healthBarAmount.xScale = CGFloat(Player.health)/CGFloat(Player.maxHealth)
+        if (playerStats.health > 0){
+            healthBarAmount.xScale = CGFloat(playerStats.health)/CGFloat(playerStats.maxHealth)
+        } else if (playerStats.health <= 0){
+            healthBarAmount.xScale = CGFloat(playerStats.health)/CGFloat(playerStats.maxHealth)
             GameScene.gameStarted = false
             print("Game over!")
         }
         
-        if (Enemy.health > 0){
-            enemyHealthBarAmount.xScale = CGFloat(Enemy.health)/CGFloat(Enemy.maxHealth)
-        } else if (Enemy.health <= 0){
-            enemyHealthBarAmount.xScale = CGFloat(Enemy.health)/CGFloat(Enemy.maxHealth)
+        if (enemyStats.health > 0){
+            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
+        } else if (enemyStats.health <= 0){
+            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
             GameScene.gameStarted = false
             print ("You win!")
         }
@@ -134,7 +140,7 @@ class GameScene: SKScene {
         addChild(healthBar)
         
         healthBarAmount.zPosition = 3
-        healthBarAmount.xScale = CGFloat(Player.health) / CGFloat(Player.health)
+        healthBarAmount.xScale = CGFloat(playerStats.health) / CGFloat(playerStats.maxHealth)
         healthBarAmount.position = CGPoint(x: frame.size.width / 25, y: frame.size.height/2)
         healthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(healthBarAmount)
@@ -159,7 +165,7 @@ class GameScene: SKScene {
         addChild(enemyHealthBar)
         
         enemyHealthBarAmount.zPosition = 3
-        enemyHealthBarAmount.xScale = CGFloat(Enemy.health) / CGFloat(Enemy.maxHealth)
+        enemyHealthBarAmount.xScale = CGFloat(enemyStats.health) / CGFloat(enemyStats.maxHealth)
         enemyHealthBarAmount.position = CGPoint(x: frame.size.width/4.3, y: frame.size.height - 20)
         enemyHealthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(enemyHealthBarAmount)
@@ -196,51 +202,51 @@ class GameScene: SKScene {
             if (pairedTile.tileType == TileType.offense){
                 switch pairedTile.effectId {
                 case 0:
-                    TileController.increaseAttackStat(increase: 10)
+                    playerStats.increaseAttackStat(increase: 10)
                 case 1:
-                    TileController.increaseAttackStat(increase: 20)
+                    playerStats.increaseAttackStat(increase: 20)
                 case 2:
-                    TileController.increaseAttackStat(increase: 30)
+                    playerStats.increaseAttackStat(increase: 30)
                 case 3:
-                    TileController.increaseAttackStat(increase: 40)
+                    playerStats.increaseAttackStat(increase: 40)
                 default:
-                    TileController.increaseAttackStat(increase: 10)
+                    playerStats.increaseAttackStat(increase: 10)
                 }
             }
             else if(pairedTile.tileType == TileType.defense){
                 switch pairedTile.effectId {
                 case 0:
-                    TileController.increaseDefenseStat(increase: 10)
+                    playerStats.increaseDefenseStat(increase: 10)
                 case 1:
-                    TileController.increaseDefenseStat(increase: 20)
+                    playerStats.increaseDefenseStat(increase: 20)
                 case 2:
-                    TileController.increaseDefenseStat(increase: 30)
+                    playerStats.increaseDefenseStat(increase: 30)
                 case 3:
-                    TileController.increaseDefenseStat(increase: 40)
+                    playerStats.increaseDefenseStat(increase: 40)
                 default:
-                    TileController.increaseDefenseStat(increase: 10)
+                    playerStats.increaseDefenseStat(increase: 10)
                 }
             }
             else if (pairedTile.tileType == TileType.healing){
                 switch pairedTile.effectId {
                 case 0:
-                    TileController.increasePlayerHealth(increase: 10)
+                    playerStats.increaseHealth(increase: 10)
                 case 1:
-                    TileController.increasePlayerHealth(increase: 20)
+                    playerStats.increaseHealth(increase: 20)
                 case 2:
-                    TileController.increasePlayerHealth(increase: 30)
+                    playerStats.increaseHealth(increase: 30)
                 case 3:
-                    TileController.increasePlayerHealth(increase: 40)
+                    playerStats.increaseHealth(increase: 40)
                 default:
-                    TileController.increasePlayerHealth(increase: 10)
+                    playerStats.increaseHealth(increase: 10)
                 }
             }
         }
+    
+        print("Player Attack Stat: \(playerStats.attackStat)")
+        print("Player Defense Stat: \(playerStats.defenseStat)")
         
-        print("Player attack stat: \(Player.attackStat)")
-        print("Player defense stat: \(Player.defenseStat)")
-        
-        Enemy.health -= (Player.attackStat - (Player.attackStat * (Enemy.defenseStat/100)))
+        enemyStats.health -= (playerStats.attackStat - (playerStats.attackStat * (enemyStats.defenseStat/100)))
                 
         GameScene.turns = 3
         GameScene.pairedTiles = [SKNode]()
@@ -252,7 +258,7 @@ class GameScene: SKScene {
     }
     
     func beginEnemyTurn(){
-        Player.health -= (Enemy.attackStat - (Enemy.attackStat * (Player.defenseStat/100)))
+        playerStats.health -= (enemyStats.attackStat - (enemyStats.attackStat * (playerStats.defenseStat/100)))
     }
     
     
