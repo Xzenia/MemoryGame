@@ -6,24 +6,35 @@
 //  Copyright © 2019 Metis. All rights reserved.
 //
 
-import Foundation
+import SpriteKit
+
 class Enemy {
-    public static var enemyName = "Cacodemon"
     
-    public static var baseAttackStat = Float(10)
+    var enemyName: String
     
-    public static var baseDefenseStat = Float(5)
+    var baseAttackStat: Float
     
-    public static var maxHealth = Float(150)
+    var baseDefenseStat: Float
     
-    public static var health = Float(150)
+    var maxHealth: Float
     
-    public static var attackStat = Player.baseAttackStat
+    var health: Float
     
-    public static var defenseStat = Player.baseDefenseStat
+    var attackStat: Float
     
-    public static func revertToBaseValues(){
-        Enemy.attackStat = Enemy.baseAttackStat
-        Enemy.defenseStat = Enemy.baseDefenseStat
+    var defenseStat: Float
+    
+    var sprite: SKTexture!
+    
+    init(_enemyName: String, _baseAttackStat: Float, _baseDefenseStat: Float, _maxHealth: Float, _sprite: SKTexture) {
+        enemyName = _enemyName
+        baseAttackStat = _baseAttackStat
+        baseDefenseStat = _baseDefenseStat
+        maxHealth = _maxHealth
+        
+        health = maxHealth
+        attackStat = baseAttackStat
+        defenseStat = baseDefenseStat
+        sprite = _sprite
     }
 }

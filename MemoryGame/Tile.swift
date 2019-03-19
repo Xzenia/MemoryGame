@@ -16,6 +16,7 @@ class Tile {
     var effectId: Int
     var tileType: TileType
     var id: Int
+    
     init (row: Int, col: Int, id: Int, effectId: Int, tileType: TileType, tile: SKTexture){
         self.row = row
         self.col = col

@@ -27,6 +27,8 @@ class GameScene: SKScene {
     public static var gameStarted = false
     
     public static var healthPotionActivated = false
+    
+    public var enemyList = [Enemy]()
 
     let rows: Int = 5
     let cols: Int = 5
@@ -62,9 +64,9 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         
         playerStats = Player(_baseAttackStat: 10, _baseDefenseStat: 8, _maxHealth: 100)
-        enemyStats = Enemy(_enemyName: "Cacodemon", _baseAttackStat: 10, _baseDefenseStat: 8, _maxHealth: 100)
         
         setupUI()
+        setupCharacters()
         
         grid = Grid(blockSize: 40.0, rows:rows, cols:cols)!
         grid.position = CGPoint (x:frame.midX, y:frame.midY/2)
@@ -122,6 +124,11 @@ class GameScene: SKScene {
             enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
             GameScene.gameStarted = false
             print ("You win!")
+            
+            enemySprite.removeFromParent()
+            generateEnemies()
+            
+            GameScene.turns = 3
         }
         
         goldCounterLabel.text = String(GameScene.gold)
@@ -159,17 +166,9 @@ class GameScene: SKScene {
         potionButton.zPosition = 3
         potionButton.position = CGPoint(x: healthBar.position.x * 3.07, y: goldCounterIcon.position.y - 50)
         addChild(potionButton)
-        
-        enemyHealthBar.position = CGPoint(x: frame.size.width/2, y: frame.size.height - 20)
-        enemyHealthBar.zPosition = 4
-        addChild(enemyHealthBar)
-        
-        enemyHealthBarAmount.zPosition = 3
-        enemyHealthBarAmount.xScale = CGFloat(enemyStats.health) / CGFloat(enemyStats.maxHealth)
-        enemyHealthBarAmount.position = CGPoint(x: frame.size.width/4.3, y: frame.size.height - 20)
-        enemyHealthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
-        addChild(enemyHealthBarAmount)
-        
+    }
+    
+    func setupCharacters(){
         
         var playerSprites: [SKTexture] = []
         for counter in 1...8{
@@ -183,6 +182,19 @@ class GameScene: SKScene {
         playerSprite.zPosition = 5
         playerSprite.run(SKAction.repeatForever(playerSpriteAnimation))
         addChild(playerSprite)
+    
+        generateEnemies()
+        
+        enemyHealthBar.position = CGPoint(x: frame.size.width/2, y: frame.size.height - 20)
+        enemyHealthBar.zPosition = 4
+        addChild(enemyHealthBar)
+        
+        enemyHealthBarAmount.zPosition = 3
+        enemyHealthBarAmount.xScale = CGFloat(enemyStats.health) / CGFloat(enemyStats.maxHealth)
+        enemyHealthBarAmount.position = CGPoint(x: frame.size.width/4.3, y: frame.size.height - 20)
+        enemyHealthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
+        addChild(enemyHealthBarAmount)
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -193,9 +205,7 @@ class GameScene: SKScene {
         }
     }
     
-    
     func playerTurnEnded(){
-        
         for tile in GameScene.pairedTiles{
             let pairedTile = GameScene.tiles[Int(tile.name!)!]
             
@@ -255,12 +265,12 @@ class GameScene: SKScene {
         GameScene.chosenNode1 = nil
         GameScene.chosenNode2 = nil
         
+        
     }
     
     func beginEnemyTurn(){
         playerStats.health -= (enemyStats.attackStat - (enemyStats.attackStat * (playerStats.defenseStat/100)))
     }
-    
     
     func generateTiles(){
         var x = 1
@@ -281,7 +291,6 @@ class GameScene: SKScene {
         
         GameScene.healthPotionActivated = false
 
-        
         while x <= rows {
             var y = 0
             while y < cols {
@@ -314,6 +323,24 @@ class GameScene: SKScene {
             }
             x = x + 1
         }
+    }
+    
+    func generateEnemies(){
+        
+        enemyList = [Enemy]()
+        enemyList.append(Enemies.byr)
+        enemyList.append(Enemies.khyr)
+        enemyList.append(Enemies.putulu)
+        enemyList.append(Enemies.vair)
+        
+        enemyStats = enemyList[Int(arc4random_uniform(UInt32(enemyList.count)))]
+        
+        enemySprite = SKSpriteNode(texture: enemyStats.sprite)
+        enemySprite.position = CGPoint(x: frame.size.width - 50, y: frame.size.height - 150)
+        enemySprite.zPosition = 5
+        
+        addChild(enemySprite)
+
     }
     
     func generateGridContents(revealTiles: Bool){
