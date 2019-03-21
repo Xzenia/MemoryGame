@@ -98,9 +98,15 @@ class Grid:SKSpriteNode {
                         GameScene.turns -= 1
                         
                         GameScene.gold += 1
+                        
+                        self.run(SKAction.playSoundFileNamed(Sounds.correctMatch, waitForCompletion: false))
+                    
                         print("Turns: \(GameScene.turns)")
                     } else {
                         print("Both tiles are not similar!")
+                        
+                        self.run(SKAction.playSoundFileNamed(Sounds.wrongMatch, waitForCompletion: false))
+                        
                         let wait = SKAction.wait(forDuration: 0.5)
                         let run = SKAction.run {
                             self.changeTilesToDefault()

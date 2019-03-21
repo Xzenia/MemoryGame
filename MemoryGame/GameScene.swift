@@ -53,17 +53,14 @@ class GameScene: SKScene {
     
     var chosenTiles = [SKTexture]()
     
-    var playerSprite = SKSpriteNode()
     var enemySprite = SKSpriteNode()
-    
-    var playerSpriteAnimation: SKAction!
     
     public var playerStats: Player!
     public var enemyStats: Enemy!
     
     override func didMove(to view: SKView) {
         
-        playerStats = Player(_baseAttackStat: 10, _baseDefenseStat: 8, _maxHealth: 100)
+        playerStats = CharacterSelection.selectedCharacter
         
         setupUI()
         setupCharacters()
@@ -83,6 +80,7 @@ class GameScene: SKScene {
             self.generateGridContents(revealTiles: false)
             GameScene.gameStarted = true
         }
+        
         self.run(SKAction.sequence([wait, run]))
         
         GameScene.chosenNode1 = nil
@@ -170,19 +168,23 @@ class GameScene: SKScene {
     
     func setupCharacters(){
         
+        let playerSprite = SKSpriteNode(imageNamed: "spr_\(CharacterSelection.selectedCharacter.name)_idle_0")
+        
         var playerSprites: [SKTexture] = []
-        for counter in 1...8{
-            playerSprites.append(SKTexture(imageNamed: "spr_Shou_idle_\(counter)"))
-        }
         
-        playerSpriteAnimation = SKAction.animate(with: playerSprites, timePerFrame: 0.2)
-        
-        playerSprite = SKSpriteNode(imageNamed: "spr_Shou_idle_0")
         playerSprite.position = CGPoint(x: frame.size.width/5, y: frame.size.height - 150)
         playerSprite.zPosition = 5
-        playerSprite.run(SKAction.repeatForever(playerSpriteAnimation))
+        
+        if (CharacterSelection.selectedCharacter.animationFrame > 1){
+            for counter in 1...CharacterSelection.selectedCharacter.animationFrame {
+                playerSprites.append(SKTexture(imageNamed: "spr_\(CharacterSelection.selectedCharacter.name)_idle_\(counter)"))
+            }
+            let playerSpriteAnimation = SKAction.animate(with: playerSprites, timePerFrame: 0.2)
+            playerSprite.run(SKAction.repeatForever(playerSpriteAnimation))
+        }
+        
         addChild(playerSprite)
-    
+        
         generateEnemies()
         
         enemyHealthBar.position = CGPoint(x: frame.size.width/2, y: frame.size.height - 20)
@@ -256,20 +258,27 @@ class GameScene: SKScene {
         print("Player Attack Stat: \(playerStats.attackStat)")
         print("Player Defense Stat: \(playerStats.defenseStat)")
         
+        if (CharacterSelection.selectedCharacter.name == CharacterSelection.rikko.name){
+            self.run(SKAction.playSoundFileNamed(Sounds.attack_magic, waitForCompletion: false))
+        } else {
+            self.run(SKAction.playSoundFileNamed(Sounds.attack_normal, waitForCompletion: false))
+        }
+        
         enemyStats.health -= (playerStats.attackStat - (playerStats.attackStat * (enemyStats.defenseStat/100)))
-                
+
+        
         GameScene.turns = 3
         GameScene.pairedTiles = [SKNode]()
         GameScene.tiles = [Tile]()
         
         GameScene.chosenNode1 = nil
         GameScene.chosenNode2 = nil
-        
-        
     }
     
     func beginEnemyTurn(){
+        self.run(SKAction.playSoundFileNamed(Sounds.playerDamage, waitForCompletion: false))
         playerStats.health -= (enemyStats.attackStat - (enemyStats.attackStat * (playerStats.defenseStat/100)))
+
     }
     
     func generateTiles(){
@@ -277,15 +286,15 @@ class GameScene: SKScene {
         var counter = 0
 
         for _ in 0...2{
-            chosenOffenseTile = Int(arc4random_uniform(UInt32(TileController.offenseTiles.count)))
-            chosenDefenseTile = Int(arc4random_uniform(UInt32(TileController.defenseTiles.count)))
-            chosenHealingTile = Int(arc4random_uniform(UInt32(TileController.healingTiles.count)))
+            chosenOffenseTile = Int(arc4random_uniform(UInt32(Tiles.offenseTiles.count)))
+            chosenDefenseTile = Int(arc4random_uniform(UInt32(Tiles.defenseTiles.count)))
+            chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count)))
             
-            chosenTiles.append(TileController.offenseTiles[chosenOffenseTile])
-            chosenTiles.append(TileController.defenseTiles[chosenDefenseTile])
+            chosenTiles.append(Tiles.offenseTiles[chosenOffenseTile])
+            chosenTiles.append(Tiles.defenseTiles[chosenDefenseTile])
             
             if (GameScene.healthPotionActivated){
-                chosenTiles.append(TileController.healingTiles[chosenHealingTile])
+                chosenTiles.append(Tiles.healingTiles[chosenHealingTile])
             }
         }
         
@@ -335,7 +344,16 @@ class GameScene: SKScene {
         
         enemyStats = enemyList[Int(arc4random_uniform(UInt32(enemyList.count)))]
         
-        enemySprite = SKSpriteNode(texture: enemyStats.sprite)
+        enemySprite = SKSpriteNode(imageNamed: "spr_\(enemyStats.enemyName)_idle_0")
+        
+        var enemyAnimationTextures = [SKTexture]()
+        for counter in 1...enemyStats.animationFrames {
+           enemyAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_idle_\(counter)"))
+        }
+        
+        let enemySpriteAnimation = SKAction.animate(with: enemyAnimationTextures, timePerFrame: 0.2)
+        enemySprite.run(SKAction.repeatForever(enemySpriteAnimation))
+
         enemySprite.position = CGPoint(x: frame.size.width - 50, y: frame.size.height - 150)
         enemySprite.zPosition = 5
         

@@ -22,10 +22,10 @@ class MainMenuScene: SKScene{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             if PlayButton.contains(touch.location(in: self)){
-                let mainGameScene = GameScene(size: (view?.bounds.size)!)
+                let characterSelectionScene = CharacterSelection(size: (view?.bounds.size)!)
                 let transition = SKTransition.flipVertical(withDuration: 1.0)
-                mainGameScene.scaleMode = SKSceneScaleMode.aspectFill
-                view?.presentScene(mainGameScene, transition: transition)
+                characterSelectionScene.scaleMode = SKSceneScaleMode.aspectFill
+                view?.presentScene(characterSelectionScene, transition: transition)
 
             }
         }

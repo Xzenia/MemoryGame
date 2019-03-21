@@ -10,6 +10,8 @@ import SpriteKit
 
 struct Player {
     
+    var name: String
+    
     var baseAttackStat: Float
     
     var baseDefenseStat: Float
@@ -22,16 +24,20 @@ struct Player {
     
     var defenseStat: Float
     
+    var animationFrame: Int
     
-    init(_baseAttackStat: Float, _baseDefenseStat: Float, _maxHealth: Float) {
+    init(_name: String, _baseAttackStat: Float, _baseDefenseStat: Float, _maxHealth: Float, _animationFrame: Int) {
         baseAttackStat = _baseAttackStat
         baseDefenseStat = _baseDefenseStat
         maxHealth = _maxHealth
         
+        animationFrame = _animationFrame
+        
+        name = _name
+        
         health = maxHealth
         attackStat = baseAttackStat
         defenseStat = baseDefenseStat
-        
     }
     
     mutating func revertToBaseValues(){

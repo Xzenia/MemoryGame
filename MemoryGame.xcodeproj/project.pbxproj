@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		E508E74122262E3400145551 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E508E74022262E3400145551 /* AppDelegate.swift */; };
-		E508E74522262E3400145551 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = E508E74422262E3400145551 /* Actions.sks */; };
 		E508E74722262E3400145551 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E508E74622262E3400145551 /* GameScene.swift */; };
 		E508E74922262E3400145551 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E508E74822262E3400145551 /* GameViewController.swift */; };
 		E508E74C22262E3400145551 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E508E74A22262E3400145551 /* Main.storyboard */; };
@@ -18,12 +17,21 @@
 		E508E76722262E3400145551 /* MemoryGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E508E76622262E3400145551 /* MemoryGameUITests.swift */; };
 		E508E77522262F4600145551 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = E508E77422262F4600145551 /* Grid.swift */; };
 		E508E77722262F5C00145551 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E508E77622262F5C00145551 /* Tile.swift */; };
-		E57DEAF1223105480071B512 /* TileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57DEAF0223105480071B512 /* TileController.swift */; };
 		E57DEAF3223114970071B512 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57DEAF2223114970071B512 /* Player.swift */; };
 		E57DEAF522311C650071B512 /* TileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57DEAF422311C650071B512 /* TileType.swift */; };
 		E5A96FBD22360F3C0031657D /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A96FBC22360F3C0031657D /* Enemy.swift */; };
+		E5D328EF2243444B00F69E88 /* CharacterSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D328EE2243444B00F69E88 /* CharacterSelection.swift */; };
 		E5D5BAB92228050B0098E45A /* Eightbitdragon.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5D5BAB82228050B0098E45A /* Eightbitdragon.otf */; };
 		E5DDFA36223A2F9E000B209D /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DDFA35223A2F9E000B209D /* MainMenuScene.swift */; };
+		E5DE312222439F25007EB9F1 /* Sounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DE312122439F25007EB9F1 /* Sounds.swift */; };
+		E5DE312D2243A392007EB9F1 /* CoinPickup.wav in Resources */ = {isa = PBXBuildFile; fileRef = E5DE31262243A392007EB9F1 /* CoinPickup.wav */; };
+		E5DE312E2243A392007EB9F1 /* CorrectMatch.wav in Resources */ = {isa = PBXBuildFile; fileRef = E5DE31272243A392007EB9F1 /* CorrectMatch.wav */; };
+		E5DE312F2243A392007EB9F1 /* EnemyDamage.wav in Resources */ = {isa = PBXBuildFile; fileRef = E5DE31282243A392007EB9F1 /* EnemyDamage.wav */; };
+		E5DE31302243A392007EB9F1 /* Hurt.wav in Resources */ = {isa = PBXBuildFile; fileRef = E5DE31292243A392007EB9F1 /* Hurt.wav */; };
+		E5DE31312243A392007EB9F1 /* MagicAttack.wav in Resources */ = {isa = PBXBuildFile; fileRef = E5DE312A2243A392007EB9F1 /* MagicAttack.wav */; };
+		E5DE31322243A392007EB9F1 /* NormalAttack.wav in Resources */ = {isa = PBXBuildFile; fileRef = E5DE312B2243A392007EB9F1 /* NormalAttack.wav */; };
+		E5DE31332243A392007EB9F1 /* WrongMatch.wav in Resources */ = {isa = PBXBuildFile; fileRef = E5DE312C2243A392007EB9F1 /* WrongMatch.wav */; };
+		E5DE31382243A5E9007EB9F1 /* Tiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DE31372243A5E9007EB9F1 /* Tiles.swift */; };
 		E5E8541B2240ADBF000A3ACE /* Enemies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E8541A2240ADBF000A3ACE /* Enemies.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +55,6 @@
 /* Begin PBXFileReference section */
 		E508E73D22262E3400145551 /* MemoryGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemoryGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E508E74022262E3400145551 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E508E74422262E3400145551 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
 		E508E74622262E3400145551 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		E508E74822262E3400145551 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		E508E74B22262E3400145551 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -62,12 +69,21 @@
 		E508E76822262E3400145551 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E508E77422262F4600145551 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		E508E77622262F5C00145551 /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
-		E57DEAF0223105480071B512 /* TileController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileController.swift; sourceTree = "<group>"; };
 		E57DEAF2223114970071B512 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		E57DEAF422311C650071B512 /* TileType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileType.swift; sourceTree = "<group>"; };
 		E5A96FBC22360F3C0031657D /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
+		E5D328EE2243444B00F69E88 /* CharacterSelection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CharacterSelection.swift; sourceTree = "<group>"; };
 		E5D5BAB82228050B0098E45A /* Eightbitdragon.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Eightbitdragon.otf; sourceTree = "<group>"; };
 		E5DDFA35223A2F9E000B209D /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
+		E5DE312122439F25007EB9F1 /* Sounds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sounds.swift; sourceTree = "<group>"; };
+		E5DE31262243A392007EB9F1 /* CoinPickup.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = CoinPickup.wav; path = "../../../../Downloads/Memoria Arcanum Wave 3/Sfx/CoinPickup.wav"; sourceTree = "<group>"; };
+		E5DE31272243A392007EB9F1 /* CorrectMatch.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = CorrectMatch.wav; path = "../../../../Downloads/Memoria Arcanum Wave 3/Sfx/CorrectMatch.wav"; sourceTree = "<group>"; };
+		E5DE31282243A392007EB9F1 /* EnemyDamage.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = EnemyDamage.wav; path = "../../../../Downloads/Memoria Arcanum Wave 3/Sfx/EnemyDamage.wav"; sourceTree = "<group>"; };
+		E5DE31292243A392007EB9F1 /* Hurt.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = Hurt.wav; path = "../../../../Downloads/Memoria Arcanum Wave 3/Sfx/Hurt.wav"; sourceTree = "<group>"; };
+		E5DE312A2243A392007EB9F1 /* MagicAttack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = MagicAttack.wav; path = "../../../../Downloads/Memoria Arcanum Wave 3/Sfx/MagicAttack.wav"; sourceTree = "<group>"; };
+		E5DE312B2243A392007EB9F1 /* NormalAttack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = NormalAttack.wav; path = "../../../../Downloads/Memoria Arcanum Wave 3/Sfx/NormalAttack.wav"; sourceTree = "<group>"; };
+		E5DE312C2243A392007EB9F1 /* WrongMatch.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = WrongMatch.wav; path = "../../../../Downloads/Memoria Arcanum Wave 3/Sfx/WrongMatch.wav"; sourceTree = "<group>"; };
+		E5DE31372243A5E9007EB9F1 /* Tiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tiles.swift; sourceTree = "<group>"; };
 		E5E8541A2240ADBF000A3ACE /* Enemies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemies.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -119,23 +135,17 @@
 		E508E73F22262E3400145551 /* MemoryGame */ = {
 			isa = PBXGroup;
 			children = (
+				E5DE31232243A250007EB9F1 /* Sounds */,
 				E5DC8ECD2227F0C300780D2A /* Fonts */,
-				E508E74022262E3400145551 /* AppDelegate.swift */,
-				E508E74422262E3400145551 /* Actions.sks */,
-				E508E74622262E3400145551 /* GameScene.swift */,
+				E5DE31362243A54A007EB9F1 /* Scene */,
+				E5DE31352243A51A007EB9F1 /* Model */,
+				E508E77422262F4600145551 /* Grid.swift */,
 				E508E74822262E3400145551 /* GameViewController.swift */,
-				E508E74A22262E3400145551 /* Main.storyboard */,
+				E508E74022262E3400145551 /* AppDelegate.swift */,
 				E508E74D22262E3400145551 /* Assets.xcassets */,
+				E508E74A22262E3400145551 /* Main.storyboard */,
 				E508E74F22262E3400145551 /* LaunchScreen.storyboard */,
 				E508E75222262E3400145551 /* Info.plist */,
-				E508E77422262F4600145551 /* Grid.swift */,
-				E508E77622262F5C00145551 /* Tile.swift */,
-				E57DEAF0223105480071B512 /* TileController.swift */,
-				E57DEAF2223114970071B512 /* Player.swift */,
-				E57DEAF422311C650071B512 /* TileType.swift */,
-				E5A96FBC22360F3C0031657D /* Enemy.swift */,
-				E5DDFA35223A2F9E000B209D /* MainMenuScene.swift */,
-				E5E8541A2240ADBF000A3ACE /* Enemies.swift */,
 			);
 			path = MemoryGame;
 			sourceTree = "<group>";
@@ -164,6 +174,60 @@
 				E5D5BAB82228050B0098E45A /* Eightbitdragon.otf */,
 			);
 			name = Fonts;
+			sourceTree = "<group>";
+		};
+		E5DE31232243A250007EB9F1 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				E5DE31252243A268007EB9F1 /* BGM */,
+				E5DE31242243A264007EB9F1 /* SFX */,
+			);
+			name = Sounds;
+			sourceTree = "<group>";
+		};
+		E5DE31242243A264007EB9F1 /* SFX */ = {
+			isa = PBXGroup;
+			children = (
+				E5DE31262243A392007EB9F1 /* CoinPickup.wav */,
+				E5DE31272243A392007EB9F1 /* CorrectMatch.wav */,
+				E5DE31282243A392007EB9F1 /* EnemyDamage.wav */,
+				E5DE31292243A392007EB9F1 /* Hurt.wav */,
+				E5DE312A2243A392007EB9F1 /* MagicAttack.wav */,
+				E5DE312B2243A392007EB9F1 /* NormalAttack.wav */,
+				E5DE312C2243A392007EB9F1 /* WrongMatch.wav */,
+			);
+			name = SFX;
+			sourceTree = "<group>";
+		};
+		E5DE31252243A268007EB9F1 /* BGM */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = BGM;
+			sourceTree = "<group>";
+		};
+		E5DE31352243A51A007EB9F1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E5DE31372243A5E9007EB9F1 /* Tiles.swift */,
+				E57DEAF422311C650071B512 /* TileType.swift */,
+				E5DE312122439F25007EB9F1 /* Sounds.swift */,
+				E5E8541A2240ADBF000A3ACE /* Enemies.swift */,
+				E508E77622262F5C00145551 /* Tile.swift */,
+				E57DEAF2223114970071B512 /* Player.swift */,
+				E5A96FBC22360F3C0031657D /* Enemy.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		E5DE31362243A54A007EB9F1 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				E5D328EE2243444B00F69E88 /* CharacterSelection.swift */,
+				E508E74622262E3400145551 /* GameScene.swift */,
+				E5DDFA35223A2F9E000B209D /* MainMenuScene.swift */,
+			);
+			name = Scene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,11 +337,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5DE312F2243A392007EB9F1 /* EnemyDamage.wav in Resources */,
+				E5DE312E2243A392007EB9F1 /* CorrectMatch.wav in Resources */,
 				E508E74C22262E3400145551 /* Main.storyboard in Resources */,
 				E508E74E22262E3400145551 /* Assets.xcassets in Resources */,
+				E5DE31312243A392007EB9F1 /* MagicAttack.wav in Resources */,
+				E5DE31302243A392007EB9F1 /* Hurt.wav in Resources */,
 				E5D5BAB92228050B0098E45A /* Eightbitdragon.otf in Resources */,
 				E508E75122262E3400145551 /* LaunchScreen.storyboard in Resources */,
-				E508E74522262E3400145551 /* Actions.sks in Resources */,
+				E5DE31332243A392007EB9F1 /* WrongMatch.wav in Resources */,
+				E5DE312D2243A392007EB9F1 /* CoinPickup.wav in Resources */,
+				E5DE31322243A392007EB9F1 /* NormalAttack.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,13 +375,15 @@
 				E5DDFA36223A2F9E000B209D /* MainMenuScene.swift in Sources */,
 				E508E74722262E3400145551 /* GameScene.swift in Sources */,
 				E57DEAF522311C650071B512 /* TileType.swift in Sources */,
-				E57DEAF1223105480071B512 /* TileController.swift in Sources */,
+				E5DE312222439F25007EB9F1 /* Sounds.swift in Sources */,
 				E508E74922262E3400145551 /* GameViewController.swift in Sources */,
 				E5E8541B2240ADBF000A3ACE /* Enemies.swift in Sources */,
+				E5DE31382243A5E9007EB9F1 /* Tiles.swift in Sources */,
 				E508E77722262F5C00145551 /* Tile.swift in Sources */,
 				E5A96FBD22360F3C0031657D /* Enemy.swift in Sources */,
 				E57DEAF3223114970071B512 /* Player.swift in Sources */,
 				E508E74122262E3400145551 /* AppDelegate.swift in Sources */,
+				E5D328EF2243444B00F69E88 /* CharacterSelection.swift in Sources */,
 				E508E77522262F4600145551 /* Grid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
