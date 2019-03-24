@@ -29,6 +29,8 @@ class GameScene: SKScene {
     public static var healthPotionActivated = false
     
     public var enemyList = [Enemy]()
+    
+    private var currentEnemyIndex = 0
 
     let rows: Int = 5
     let cols: Int = 5
@@ -124,9 +126,14 @@ class GameScene: SKScene {
             print ("You win!")
             
             enemySprite.removeFromParent()
-            generateEnemies()
+            enemyList.remove(at: currentEnemyIndex)
             
-            GameScene.turns = 3
+            if (enemyList.count > 0){
+                generateEnemies()
+                GameScene.turns = 3
+            } else {
+                print("All enemies defeated!")
+            }
         }
         
         goldCounterLabel.text = String(GameScene.gold)
@@ -184,6 +191,13 @@ class GameScene: SKScene {
         }
         
         addChild(playerSprite)
+        
+        
+        enemyList = [Enemy]()
+        enemyList.append(Enemies.byr)
+        enemyList.append(Enemies.khyr)
+        enemyList.append(Enemies.putulu)
+        enemyList.append(Enemies.vair)
         
         generateEnemies()
         
@@ -335,15 +349,10 @@ class GameScene: SKScene {
     }
     
     func generateEnemies(){
+    
+        currentEnemyIndex = Int(arc4random_uniform(UInt32(enemyList.count)))
         
-        enemyList = [Enemy]()
-        enemyList.append(Enemies.byr)
-        enemyList.append(Enemies.khyr)
-        enemyList.append(Enemies.putulu)
-        enemyList.append(Enemies.vair)
-        
-        enemyStats = enemyList[Int(arc4random_uniform(UInt32(enemyList.count)))]
-        
+        enemyStats = enemyList[currentEnemyIndex]
         enemySprite = SKSpriteNode(imageNamed: "spr_\(enemyStats.enemyName)_idle_0")
         
         var enemyAnimationTextures = [SKTexture]()
