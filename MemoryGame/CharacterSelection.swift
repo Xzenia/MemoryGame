@@ -11,8 +11,8 @@ import SpriteKit
 class CharacterSelection: SKScene {
     
     public static let shou = Player(_name: "Shou", _baseAttackStat: 10, _baseDefenseStat: 8, _maxHealth: 100, _animationFrame: 8)
-    public static let rikko = Player(_name: "Rikko", _baseAttackStat: 8, _baseDefenseStat: 10, _maxHealth: 100, _animationFrame: 0)
-    public static let emily = Player(_name: "Emily", _baseAttackStat: 15, _baseDefenseStat: 5, _maxHealth: 120, _animationFrame: 0)
+    public static let rikko = Player(_name: "Rikko", _baseAttackStat: 8, _baseDefenseStat: 10, _maxHealth: 100, _animationFrame: 10)
+    public static let emily = Player(_name: "Emily", _baseAttackStat: 15, _baseDefenseStat: 5, _maxHealth: 120, _animationFrame: 10)
     
     public static var selectedCharacter = CharacterSelection.shou
     

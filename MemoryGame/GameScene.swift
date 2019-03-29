@@ -32,8 +32,8 @@ class GameScene: SKScene {
     
     private var currentEnemyIndex = 0
 
-    let rows: Int = 5
-    let cols: Int = 5
+    let rows: Int = 6
+    let cols: Int = 6
     
     var grid : Grid!
     
