@@ -272,12 +272,6 @@ class GameScene: SKScene {
         print("Player Attack Stat: \(playerStats.attackStat)")
         print("Player Defense Stat: \(playerStats.defenseStat)")
         
-        if (CharacterSelection.selectedCharacter.name == CharacterSelection.rikko.name){
-            self.run(SKAction.playSoundFileNamed(Sounds.attack_magic, waitForCompletion: false))
-        } else {
-            self.run(SKAction.playSoundFileNamed(Sounds.attack_normal, waitForCompletion: false))
-        }
-        
         enemyStats.health -= (playerStats.attackStat - (playerStats.attackStat * (enemyStats.defenseStat/100)))
 
         
@@ -290,7 +284,6 @@ class GameScene: SKScene {
     }
     
     func beginEnemyTurn(){
-        self.run(SKAction.playSoundFileNamed(Sounds.playerDamage, waitForCompletion: false))
         playerStats.health -= (enemyStats.attackStat - (enemyStats.attackStat * (playerStats.defenseStat/100)))
 
     }

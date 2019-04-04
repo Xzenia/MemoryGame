@@ -25,4 +25,5 @@ class Tile {
         self.tileType = tileType
         self.tile = tile
     }
+
 }
