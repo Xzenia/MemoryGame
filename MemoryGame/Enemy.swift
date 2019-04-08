@@ -24,15 +24,19 @@ class Enemy {
     
     var defenseStat: Float
     
-    var animationFrames: Int
+    var idleAnimationFrames: Int
     
-    init(_enemyName: String, _baseAttackStat: Float, _baseDefenseStat: Float, _maxHealth: Float, _animationFrames: Int) {
+    var deathAnimationFrames: Int
+    
+    init(_enemyName: String, _baseAttackStat: Float, _baseDefenseStat: Float, _maxHealth: Float, _idleAnimationFrames: Int, _deathAnimationFrames: Int) {
         enemyName = _enemyName
         baseAttackStat = _baseAttackStat
         baseDefenseStat = _baseDefenseStat
         maxHealth = _maxHealth
         
-        animationFrames = _animationFrames
+        idleAnimationFrames = _idleAnimationFrames
+        
+        deathAnimationFrames = _deathAnimationFrames
         
         health = maxHealth
         attackStat = baseAttackStat

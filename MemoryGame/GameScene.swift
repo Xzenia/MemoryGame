@@ -57,6 +57,8 @@ class GameScene: SKScene {
     
     var enemySprite = SKSpriteNode()
     
+    var enemyDeathSpriteAnimation = SKAction()
+    
     public var playerStats: Player!
     public var enemyStats: Enemy!
     
@@ -125,9 +127,9 @@ class GameScene: SKScene {
             GameScene.gameStarted = false
             print ("You win!")
             
-            enemySprite.removeFromParent()
-            enemyList.remove(at: currentEnemyIndex)
-            
+            self.enemySprite.removeFromParent()
+            self.enemyList.remove(at: self.currentEnemyIndex)
+
             if (enemyList.count > 0){
                 generateEnemies()
                 GameScene.turns = 3
@@ -198,6 +200,8 @@ class GameScene: SKScene {
         enemyList.append(Enemies.khyr)
         enemyList.append(Enemies.putulu)
         enemyList.append(Enemies.vair)
+        
+        enemyList = sortList(_list: enemyList)
         
         generateEnemies()
         
@@ -348,13 +352,19 @@ class GameScene: SKScene {
         enemyStats = enemyList[currentEnemyIndex]
         enemySprite = SKSpriteNode(imageNamed: "spr_\(enemyStats.enemyName)_idle_0")
         
-        var enemyAnimationTextures = [SKTexture]()
-        for counter in 1...enemyStats.animationFrames {
-           enemyAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_idle_\(counter)"))
+        var enemyIdleAnimationTextures = [SKTexture]()
+        var enemyDeathAnimationTextures = [SKTexture]()
+        for counter in 1...enemyStats.idleAnimationFrames {
+           enemyIdleAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_idle_\(counter)"))
         }
         
-        let enemySpriteAnimation = SKAction.animate(with: enemyAnimationTextures, timePerFrame: 0.2)
-        enemySprite.run(SKAction.repeatForever(enemySpriteAnimation))
+        for counter in 0...enemyStats.deathAnimationFrames {
+            enemyDeathAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_die_\(counter)"))
+        }
+        
+        let enemyIdleSpriteAnimation = SKAction.animate(with: enemyIdleAnimationTextures, timePerFrame: 0.2)
+        enemyDeathSpriteAnimation = SKAction.animate (with: enemyDeathAnimationTextures, timePerFrame: 1.5)
+        enemySprite.run(SKAction.repeatForever(enemyIdleSpriteAnimation))
 
         enemySprite.position = CGPoint(x: frame.size.width - 50, y: frame.size.height - 150)
         enemySprite.zPosition = 5
@@ -392,5 +402,38 @@ class GameScene: SKScene {
             }
             x = x + 1
         }
+    }
+    
+    func sortList(_list: [Enemy]) -> [Enemy]{
+        var beginningIndex = 0
+        var endingIndex = _list.count - 1
+        
+        var list = _list
+        
+        //Decreases the amount of comparisons that insertion sort has to do.
+        while beginningIndex < endingIndex{
+            if ((list[beginningIndex].attackStat + list[endingIndex].defenseStat) > (list[beginningIndex].attackStat + list[endingIndex].defenseStat)){
+                let temp = list[beginningIndex]
+                list[beginningIndex] = list[endingIndex]
+                list[endingIndex] = temp
+            }
+            beginningIndex = beginningIndex + 1
+            endingIndex = endingIndex - 1
+        }
+        
+        //Insertion Sort
+        for j in 1...list.count - 1{
+            let key = list[j].attackStat + list[j].defenseStat
+            var i = j - 1
+            
+            while(i >= 0 && (list[j].attackStat + list[j].defenseStat) > key){
+                list[i + 1] = list[i]
+                i = i - 1
+            }
+            
+            list[i + 1] = list[j]
+        }
+        
+        return list
     }
 }
