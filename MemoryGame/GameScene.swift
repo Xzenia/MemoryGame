@@ -30,12 +30,12 @@ class GameScene: SKScene {
     
     public var enemyList = [Enemy]()
     
-    private var currentEnemyIndex = 0
-
-    let rows: Int = 6
-    let cols: Int = 6
+    let rows: Int = 5
+    let cols: Int = 5
     
     var grid : Grid!
+    
+    var enemyDeathAnimationTextures = [SKTexture]()
     
     //UI Elements
     let background = SKSpriteNode(imageNamed: "grid_background")
@@ -49,19 +49,11 @@ class GameScene: SKScene {
     
     let potionButton = SKSpriteNode(imageNamed: "healing_tile_4")
     
-    var chosenOffenseTile : Int = 0
-    var chosenDefenseTile : Int = 0
-    var chosenHealingTile : Int = 0
-    
-    var chosenTiles = [SKTexture]()
-    
     var enemySprite = SKSpriteNode()
     
     public var playerStats: Player!
     public var enemyStats: Enemy!
-    
-    public var isEnemyDead = false
-    
+
     override func didMove(to view: SKView) {
         
         playerStats = CharacterSelection.selectedCharacter
@@ -91,18 +83,25 @@ class GameScene: SKScene {
         GameScene.chosenNode2 = nil
         
         print("Turns: \(GameScene.turns)")
+        
     }
     
     override func update(_ currentTime: TimeInterval) {
         if (GameScene.turns <= 0){
-            
             playerTurnEnded()
             beginEnemyTurn()
             playerStats.revertToBaseValues()
+            
+            GameScene.pairedTiles = [SKNode]()
+            GameScene.tiles = [Tile]()
+            
+            GameScene.chosenNode1 = nil
+            GameScene.chosenNode2 = nil
+                
+            GameScene.gameStarted = false
+            
             generateTiles()
             generateGridContents(revealTiles: true)
-            
-            GameScene.gameStarted = false
             
             let wait = SKAction.wait(forDuration: 3)
             let run = SKAction.run {
@@ -110,6 +109,7 @@ class GameScene: SKScene {
                 GameScene.gameStarted = true
             }
             self.run(SKAction.sequence([wait, run]))
+            GameScene.turns = 3
         }
         
         if (playerStats.health > 0){
@@ -120,6 +120,9 @@ class GameScene: SKScene {
             print("Game over!")
         }
         
+        if (enemyStats.health >= 0){
+            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
+        }
         
         goldCounterLabel.text = String(GameScene.gold)
     }
@@ -158,6 +161,7 @@ class GameScene: SKScene {
         addChild(potionButton)
     }
     
+    
     func setupCharacters(){
         
         let playerSprite = SKSpriteNode(imageNamed: "spr_\(CharacterSelection.selectedCharacter.name)_idle_0")
@@ -177,15 +181,7 @@ class GameScene: SKScene {
         
         addChild(playerSprite)
         
-        
-        enemyList = [Enemy]()
-        enemyList.append(Enemies.byr)
-        enemyList.append(Enemies.khyr)
-        enemyList.append(Enemies.putulu)
-        enemyList.append(Enemies.vair)
-        
-        enemyList = sortList(_list: enemyList)
-        
+        initializeEnemies()
         generateEnemies()
         
         enemyHealthBar.position = CGPoint(x: frame.size.width/2, y: frame.size.height - 20)
@@ -208,6 +204,7 @@ class GameScene: SKScene {
     }
     
     func playerTurnEnded(){
+
         for tile in GameScene.pairedTiles{
             let pairedTile = GameScene.tiles[Int(tile.name!)!]
             
@@ -225,7 +222,8 @@ class GameScene: SKScene {
                     playerStats.increaseAttackStat(increase: 10)
                 }
             }
-            else if(pairedTile.tileType == TileType.defense){
+                
+            else if (pairedTile.tileType == TileType.defense){
                 switch pairedTile.effectId {
                 case 0:
                     playerStats.increaseDefenseStat(increase: 10)
@@ -259,65 +257,45 @@ class GameScene: SKScene {
         print("Player Defense Stat: \(playerStats.defenseStat)")
         
         enemyStats.health -= (playerStats.attackStat - (playerStats.attackStat * (enemyStats.defenseStat/100)))
-
-        GameScene.turns = 3
-        GameScene.pairedTiles = [SKNode]()
-        GameScene.tiles = [Tile]()
-        
-        GameScene.chosenNode1 = nil
-        GameScene.chosenNode2 = nil
  
-        if (enemyStats.health > 0){
-            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
-        } else if (enemyStats.health <= 0){
-            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
+        if (enemyStats.health <= 0){
             GameScene.gameStarted = false
             print ("You win!")
             
-            var enemyDeathAnimationTextures = [SKTexture]()
-            
-            for counter in 0...enemyStats.deathAnimationFrames {
-                enemyDeathAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_die_\(counter)"))
-            }
-            
-            var enemyDeathSpriteAnimation = SKAction.animate (with: enemyDeathAnimationTextures, timePerFrame: 0.4)
+            let enemyDeathSpriteAnimation = SKAction.animate (with: enemyDeathAnimationTextures, timePerFrame: 0.4)
             
             enemySprite.run(enemyDeathSpriteAnimation, completion: {
                 self.enemySprite.removeFromParent()
-                self.enemyList.remove(at: self.currentEnemyIndex)
+                self.enemyList.remove(at: 0)
                 
                 if (self.enemyList.count > 0){
                     self.generateEnemies()
-                    GameScene.turns = 3
                 } else {
                     print("All enemies defeated!")
                 }
             })
-            
         }
-
     }
     
     func beginEnemyTurn(){
         playerStats.health -= (enemyStats.attackStat - (enemyStats.attackStat * (playerStats.defenseStat/100)))
-
     }
     
     func generateTiles(){
         var x = 1
         var counter = 0
-
-        for _ in 0...2{
-            chosenOffenseTile = Int(arc4random_uniform(UInt32(Tiles.offenseTiles.count)))
-            chosenDefenseTile = Int(arc4random_uniform(UInt32(Tiles.defenseTiles.count)))
-            chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count)))
-            
-            chosenTiles.append(Tiles.offenseTiles[chosenOffenseTile])
-            chosenTiles.append(Tiles.defenseTiles[chosenDefenseTile])
-            
-            if (GameScene.healthPotionActivated){
-                chosenTiles.append(Tiles.healingTiles[chosenHealingTile])
-            }
+        
+        var chosenTiles = [SKTexture]()
+    
+        let chosenOffenseTile = Int(arc4random_uniform(UInt32(Tiles.offenseTiles.count)))
+        let chosenDefenseTile = Int(arc4random_uniform(UInt32(Tiles.defenseTiles.count)))
+        let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count)))
+        
+        chosenTiles.append(Tiles.offenseTiles[chosenOffenseTile])
+        chosenTiles.append(Tiles.defenseTiles[chosenDefenseTile])
+        
+        if (GameScene.healthPotionActivated){
+            chosenTiles.append(Tiles.healingTiles[chosenHealingTile])
         }
         
         GameScene.healthPotionActivated = false
@@ -341,8 +319,9 @@ class GameScene: SKScene {
                     effectId = chosenHealingTile
                     tileType = TileType.healing
                 default:
-                    effectId = 0
+                    effectId = chosenOffenseTile
                     tileType = TileType.offense
+                    print("generateTiles() switch case went to default!")
                 }
                 
                 let tile = Tile(row: x-1, col: y, id: counter, effectId: effectId, tileType: tileType, tile: chosenTiles[randomNum])
@@ -356,17 +335,49 @@ class GameScene: SKScene {
         }
     }
     
-    func generateEnemies(){
-    
-        currentEnemyIndex = Int(arc4random_uniform(UInt32(enemyList.count)))
+    func initializeEnemies(){
+        var tempList = [Enemy]()
         
-        enemyStats = enemyList[currentEnemyIndex]
+        tempList.append(Enemies.byr)
+        tempList.append(Enemies.khyr)
+        tempList.append(Enemies.putulu)
+        tempList.append(Enemies.vair)
+        
+        tempList.append(Enemies.duwende)
+        tempList.append(Enemies.kapre)
+        tempList.append(Enemies.manananggal)
+        tempList.append(Enemies.tikbalang)
+        
+        tempList.append(Enemies.kyub)
+        tempList.append(Enemies.kown)
+        
+        tempList.shuffle()
+        
+        let numberOfEnemies = Int(arc4random_uniform(8)) + 2
+        
+        for i in 0...numberOfEnemies - 1 {
+            enemyList.append(tempList[Int(i)])
+        }
+        
+        print("Number of Enemies: \(numberOfEnemies)")
+        
+        enemyList = sortList(_list: enemyList)
+    }
+    
+    func generateEnemies(){
+        enemyStats = enemyList[0]
         enemySprite = SKSpriteNode(imageNamed: "spr_\(enemyStats.enemyName)_idle_0")
         
         var enemyIdleAnimationTextures = [SKTexture]()
         
         for counter in 1...enemyStats.idleAnimationFrames {
            enemyIdleAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_idle_\(counter)"))
+        }
+        
+        enemyDeathAnimationTextures = [SKTexture]()
+        
+        for counter in 0...enemyStats.deathAnimationFrames {
+            enemyDeathAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_die_\(counter)"))
         }
 
         let enemyIdleSpriteAnimation = SKAction.animate(with: enemyIdleAnimationTextures, timePerFrame: 0.2)
