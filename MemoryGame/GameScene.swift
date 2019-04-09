@@ -57,10 +57,10 @@ class GameScene: SKScene {
     
     var enemySprite = SKSpriteNode()
     
-    var enemyDeathSpriteAnimation = SKAction()
-    
     public var playerStats: Player!
     public var enemyStats: Enemy!
+    
+    public var isEnemyDead = false
     
     override func didMove(to view: SKView) {
         
@@ -120,23 +120,6 @@ class GameScene: SKScene {
             print("Game over!")
         }
         
-        if (enemyStats.health > 0){
-            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
-        } else if (enemyStats.health <= 0){
-            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
-            GameScene.gameStarted = false
-            print ("You win!")
-            
-            self.enemySprite.removeFromParent()
-            self.enemyList.remove(at: self.currentEnemyIndex)
-
-            if (enemyList.count > 0){
-                generateEnemies()
-                GameScene.turns = 3
-            } else {
-                print("All enemies defeated!")
-            }
-        }
         
         goldCounterLabel.text = String(GameScene.gold)
     }
@@ -214,7 +197,6 @@ class GameScene: SKScene {
         enemyHealthBarAmount.position = CGPoint(x: frame.size.width/4.3, y: frame.size.height - 20)
         enemyHealthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(enemyHealthBarAmount)
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -278,13 +260,42 @@ class GameScene: SKScene {
         
         enemyStats.health -= (playerStats.attackStat - (playerStats.attackStat * (enemyStats.defenseStat/100)))
 
-        
         GameScene.turns = 3
         GameScene.pairedTiles = [SKNode]()
         GameScene.tiles = [Tile]()
         
         GameScene.chosenNode1 = nil
         GameScene.chosenNode2 = nil
+ 
+        if (enemyStats.health > 0){
+            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
+        } else if (enemyStats.health <= 0){
+            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
+            GameScene.gameStarted = false
+            print ("You win!")
+            
+            var enemyDeathAnimationTextures = [SKTexture]()
+            
+            for counter in 0...enemyStats.deathAnimationFrames {
+                enemyDeathAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_die_\(counter)"))
+            }
+            
+            var enemyDeathSpriteAnimation = SKAction.animate (with: enemyDeathAnimationTextures, timePerFrame: 0.4)
+            
+            enemySprite.run(enemyDeathSpriteAnimation, completion: {
+                self.enemySprite.removeFromParent()
+                self.enemyList.remove(at: self.currentEnemyIndex)
+                
+                if (self.enemyList.count > 0){
+                    self.generateEnemies()
+                    GameScene.turns = 3
+                } else {
+                    print("All enemies defeated!")
+                }
+            })
+            
+        }
+
     }
     
     func beginEnemyTurn(){
@@ -353,17 +364,12 @@ class GameScene: SKScene {
         enemySprite = SKSpriteNode(imageNamed: "spr_\(enemyStats.enemyName)_idle_0")
         
         var enemyIdleAnimationTextures = [SKTexture]()
-        var enemyDeathAnimationTextures = [SKTexture]()
+        
         for counter in 1...enemyStats.idleAnimationFrames {
            enemyIdleAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_idle_\(counter)"))
         }
-        
-        for counter in 0...enemyStats.deathAnimationFrames {
-            enemyDeathAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_die_\(counter)"))
-        }
-        
+
         let enemyIdleSpriteAnimation = SKAction.animate(with: enemyIdleAnimationTextures, timePerFrame: 0.2)
-        enemyDeathSpriteAnimation = SKAction.animate (with: enemyDeathAnimationTextures, timePerFrame: 1.5)
         enemySprite.run(SKAction.repeatForever(enemyIdleSpriteAnimation))
 
         enemySprite.position = CGPoint(x: frame.size.width - 50, y: frame.size.height - 150)
