@@ -49,11 +49,14 @@ class GameScene: SKScene {
     
     let potionButton = SKSpriteNode(imageNamed: "healing_tile_4")
     
+    let attackButton = SKSpriteNode(imageNamed: "Attack")
+    let defendButton = SKSpriteNode(imageNamed: "Defend")
+    
     var enemySprite = SKSpriteNode()
     
     public var playerStats: Player!
     public var enemyStats: Enemy!
-
+    
     override func didMove(to view: SKView) {
         
         playerStats = CharacterSelection.selectedCharacter
@@ -65,19 +68,9 @@ class GameScene: SKScene {
         grid.position = CGPoint (x:frame.midX, y:frame.midY/2)
         grid.zPosition = 3
         
-        generateTiles()
+        setupGrid()
         addChild(grid)
         
-        generateGridContents(revealTiles: true)
-        
-        let wait = SKAction.wait(forDuration: 5)
-        let run = SKAction.run {
-            self.grid.removeAllChildren()	
-            self.generateGridContents(revealTiles: false)
-            GameScene.gameStarted = true
-        }
-        
-        self.run(SKAction.sequence([wait, run]))
         
         GameScene.chosenNode1 = nil
         GameScene.chosenNode2 = nil
@@ -97,31 +90,26 @@ class GameScene: SKScene {
             
             GameScene.chosenNode1 = nil
             GameScene.chosenNode2 = nil
-                
+            
             GameScene.gameStarted = false
             
-            generateTiles()
-            generateGridContents(revealTiles: true)
+            setupGrid()
             
-            let wait = SKAction.wait(forDuration: 3)
-            let run = SKAction.run {
-                self.generateGridContents(revealTiles: false)
-                GameScene.gameStarted = true
-            }
-            self.run(SKAction.sequence([wait, run]))
             GameScene.turns = 3
         }
         
         if (playerStats.health > 0){
             healthBarAmount.xScale = CGFloat(playerStats.health)/CGFloat(playerStats.maxHealth)
         } else if (playerStats.health <= 0){
-            healthBarAmount.xScale = CGFloat(playerStats.health)/CGFloat(playerStats.maxHealth)
+            healthBarAmount.xScale = 0/CGFloat(playerStats.maxHealth)
             GameScene.gameStarted = false
             print("Game over!")
         }
         
-        if (enemyStats.health >= 0){
+        if (enemyStats.health > 0){
             enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
+        } else if (enemyStats.health <= 0){
+            enemyHealthBarAmount.xScale = 0/CGFloat(enemyStats.maxHealth)
         }
         
         goldCounterLabel.text = String(GameScene.gold)
@@ -195,6 +183,19 @@ class GameScene: SKScene {
         addChild(enemyHealthBarAmount)
     }
     
+    func setupGrid(){
+        generateTiles()
+        generateGridContents(revealTiles: true)
+        
+        let wait = SKAction.wait(forDuration: 5)
+        let run = SKAction.run {
+            self.grid.removeAllChildren()
+            self.generateGridContents(revealTiles: false)
+            GameScene.gameStarted = true
+        }
+        self.run(SKAction.sequence([wait, run]))
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             if potionButton.contains(touch.location(in: self)){
@@ -204,7 +205,7 @@ class GameScene: SKScene {
     }
     
     func playerTurnEnded(){
-
+        
         for tile in GameScene.pairedTiles{
             let pairedTile = GameScene.tiles[Int(tile.name!)!]
             
@@ -252,12 +253,12 @@ class GameScene: SKScene {
                 }
             }
         }
-    
+        
         print("Player Attack Stat: \(playerStats.attackStat)")
         print("Player Defense Stat: \(playerStats.defenseStat)")
         
         enemyStats.health -= (playerStats.attackStat - (playerStats.attackStat * (enemyStats.defenseStat/100)))
- 
+        
         if (enemyStats.health <= 0){
             GameScene.gameStarted = false
             print ("You win!")
@@ -286,7 +287,7 @@ class GameScene: SKScene {
         var counter = 0
         
         var chosenTiles = [SKTexture]()
-    
+        
         let chosenOffenseTile = Int(arc4random_uniform(UInt32(Tiles.offenseTiles.count)))
         let chosenDefenseTile = Int(arc4random_uniform(UInt32(Tiles.defenseTiles.count)))
         let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count)))
@@ -299,7 +300,7 @@ class GameScene: SKScene {
         }
         
         GameScene.healthPotionActivated = false
-
+        
         while x <= rows {
             var y = 0
             while y < cols {
@@ -371,7 +372,7 @@ class GameScene: SKScene {
         var enemyIdleAnimationTextures = [SKTexture]()
         
         for counter in 1...enemyStats.idleAnimationFrames {
-           enemyIdleAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_idle_\(counter)"))
+            enemyIdleAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_idle_\(counter)"))
         }
         
         enemyDeathAnimationTextures = [SKTexture]()
@@ -379,15 +380,15 @@ class GameScene: SKScene {
         for counter in 0...enemyStats.deathAnimationFrames {
             enemyDeathAnimationTextures.append(SKTexture(imageNamed: "spr_\(enemyStats.enemyName)_die_\(counter)"))
         }
-
+        
         let enemyIdleSpriteAnimation = SKAction.animate(with: enemyIdleAnimationTextures, timePerFrame: 0.2)
         enemySprite.run(SKAction.repeatForever(enemyIdleSpriteAnimation))
-
+        
         enemySprite.position = CGPoint(x: frame.size.width - 50, y: frame.size.height - 150)
         enemySprite.zPosition = 5
         
         addChild(enemySprite)
-
+        
     }
     
     func generateGridContents(revealTiles: Bool){
@@ -439,7 +440,7 @@ class GameScene: SKScene {
         }
         
         //Insertion Sort
-        for j in 1...list.count - 1{
+        for j in 1...list.count - 1 {
             let key = list[j].attackStat + list[j].defenseStat
             var i = j - 1
             
@@ -450,7 +451,6 @@ class GameScene: SKScene {
             
             list[i + 1] = list[j]
         }
-        
         return list
     }
 }
