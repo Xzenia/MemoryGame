@@ -1,13 +1,4 @@
-//
-//  GameScene.swift
-//  Test Project
-//
-//  Created by Metis on 12/02/2019.
-//  Copyright © 2019 Metis. All rights reserved.
-//
-
 import SpriteKit
-
 
 class GameScene: SKScene {
     
@@ -38,7 +29,8 @@ class GameScene: SKScene {
     var enemyDeathAnimationTextures = [SKTexture]()
     
     //UI Elements
-    let background = SKSpriteNode(imageNamed: "grid_background")
+    let background_lower = SKSpriteNode(imageNamed: "crystalCave_bottom")
+    let background_upper = SKSpriteNode(imageNamed: "crystalCave_top")
     let healthBar = SKSpriteNode(imageNamed: "health_bar")
     let healthBarAmount = SKSpriteNode(imageNamed: "health_bar_amount")
     let goldCounterIcon = SKSpriteNode(imageNamed: "coin_icon")
@@ -47,15 +39,15 @@ class GameScene: SKScene {
     let enemyHealthBar = SKSpriteNode(imageNamed: "enemy_health_bar")
     let enemyHealthBarAmount = SKSpriteNode(imageNamed: "enemy_health_bar_amount")
     
-    let potionButton = SKSpriteNode(imageNamed: "healing_tile_4")
-    
-    let attackButton = SKSpriteNode(imageNamed: "Attack")
-    let defendButton = SKSpriteNode(imageNamed: "Defend")
+    let potionButton = SKSpriteNode(imageNamed: "spr_potion_0")
     
     var enemySprite = SKSpriteNode()
     
     public var playerStats: Player!
     public var enemyStats: Enemy!
+    
+    var tapObject = SKSpriteNode(imageNamed: "tap_effect_0")
+    var tapAnimation = SKAction()
     
     override func didMove(to view: SKView) {
         
@@ -70,7 +62,6 @@ class GameScene: SKScene {
         
         setupGrid()
         addChild(grid)
-        
         
         GameScene.chosenNode1 = nil
         GameScene.chosenNode2 = nil
@@ -116,12 +107,17 @@ class GameScene: SKScene {
     }
     
     func setupUI(){
+        background_lower.size.width = CGFloat(frame.size.width)
+        background_lower.size.height = CGFloat(frame.size.height)
+        background_lower.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
+        background_lower.zPosition = 0
+        addChild(background_lower)
         
-        background.size.width = CGFloat(frame.size.width)
-        background.size.height = CGFloat(frame.size.height)
-        background.position = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
-        background.zPosition = 0
-        addChild(background)
+        background_upper.size.width = CGFloat(frame.size.width)
+        background_upper.size.height = CGFloat(frame.size.height)
+        background_upper.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
+        background_upper.zPosition = 0
+        addChild(background_upper)
         
         healthBar.position = CGPoint(x: frame.size.width / 3.3, y: frame.size.height/2)
         healthBar.zPosition = 4
@@ -134,24 +130,32 @@ class GameScene: SKScene {
         addChild(healthBarAmount)
         
         goldCounterIcon.zPosition = 3
-        goldCounterIcon.position = CGPoint(x: healthBar.position.x * 2.8, y: frame.size.height/2)
+        goldCounterIcon.position = CGPoint(x: frame.size.width/2 + 130, y: frame.size.height/2)
         addChild(goldCounterIcon)
         
         goldCounterLabel.zPosition = 3
-        goldCounterLabel.position = CGPoint (x: healthBar.position.x * 3.07, y: goldCounterIcon.position.y - 15)
+        goldCounterLabel.position = CGPoint (x: frame.size.width/2 + 160, y: goldCounterIcon.position.y - 15)
         
         goldCounterLabel.text = String(GameScene.gold)
         goldCounterLabel.fontColor = UIColor.black
         addChild(goldCounterLabel)
         
         potionButton.zPosition = 3
-        potionButton.position = CGPoint(x: healthBar.position.x * 3.07, y: goldCounterIcon.position.y - 50)
+        potionButton.position = CGPoint(x: healthBar.position.x * 2.98, y: goldCounterIcon.position.y - 50)
         addChild(potionButton)
+        
+        var tapAnimationTextures = [SKTexture]()
+        
+        for counter in 0...7{
+            tapAnimationTextures.append(SKTexture(imageNamed: "tap_effect_\(counter)"))
+        }
+        tapObject.zPosition = 10
+        tapAnimation = SKAction.animate(with: tapAnimationTextures, timePerFrame: 0.05)
+        
+        addChild(tapObject)
     }
     
-    
     func setupCharacters(){
-        
         let playerSprite = SKSpriteNode(imageNamed: "spr_\(CharacterSelection.selectedCharacter.name)_idle_0")
         
         var playerSprites: [SKTexture] = []
@@ -201,11 +205,13 @@ class GameScene: SKScene {
             if potionButton.contains(touch.location(in: self)){
                 GameScene.healthPotionActivated = true
             }
+            let position = touch.location(in:self)
+            tapObject.position = position
+            tapObject.run(tapAnimation)
         }
     }
     
     func playerTurnEnded(){
-        
         for tile in GameScene.pairedTiles{
             let pairedTile = GameScene.tiles[Int(tile.name!)!]
             
