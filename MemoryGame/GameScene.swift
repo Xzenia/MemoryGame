@@ -292,17 +292,26 @@ class GameScene: SKScene {
         var x = 1
         var counter = 0
         
-        var chosenTiles = [SKTexture]()
-        
-        let chosenOffenseTile = Int(arc4random_uniform(UInt32(Tiles.offenseTiles.count)))
-        let chosenDefenseTile = Int(arc4random_uniform(UInt32(Tiles.defenseTiles.count)))
-        let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count)))
-        
-        chosenTiles.append(Tiles.offenseTiles[chosenOffenseTile])
-        chosenTiles.append(Tiles.defenseTiles[chosenDefenseTile])
-        
-        if (GameScene.healthPotionActivated){
-            chosenTiles.append(Tiles.healingTiles[chosenHealingTile])
+        var chosenTiles = [Tile]()
+
+        for _ in 0...2{
+            
+            let chosenOffenseTile = Int(arc4random_uniform(UInt32(Tiles.offenseTiles.count)))
+            let chosenDefenseTile = Int(arc4random_uniform(UInt32(Tiles.defenseTiles.count)))
+            let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count)))
+            
+            let offenseTile = Tile(row: 0, col: 0, id: 0, effectId: chosenOffenseTile, tileType: TileType.offense, tile: Tiles.offenseTiles[chosenOffenseTile])
+            
+            let defenseTile = Tile(row: 0, col: 0, id: 0, effectId: chosenDefenseTile, tileType: TileType.defense, tile: Tiles.defenseTiles[chosenDefenseTile])
+            
+            let healingTile = Tile(row: 0, col: 0, id: 0, effectId: chosenHealingTile, tileType: TileType.healing, tile: Tiles.healingTiles[chosenHealingTile])
+            
+            chosenTiles.append(offenseTile)
+            chosenTiles.append(defenseTile)
+            
+            if (GameScene.healthPotionActivated){
+                chosenTiles.append(healingTile)
+            }
         }
         
         GameScene.healthPotionActivated = false
@@ -311,27 +320,8 @@ class GameScene: SKScene {
             var y = 0
             while y < cols {
                 let randomNum = Int(arc4random_uniform(UInt32(chosenTiles.count)))
-                
-                var effectId : Int
-                var tileType: TileType
-                
-                switch randomNum {
-                case 0:
-                    effectId = chosenOffenseTile
-                    tileType = TileType.offense
-                case 1:
-                    effectId = chosenDefenseTile
-                    tileType = TileType.defense
-                case 2:
-                    effectId = chosenHealingTile
-                    tileType = TileType.healing
-                default:
-                    effectId = chosenOffenseTile
-                    tileType = TileType.offense
-                    print("generateTiles() switch case went to default!")
-                }
-                
-                let tile = Tile(row: x-1, col: y, id: counter, effectId: effectId, tileType: tileType, tile: chosenTiles[randomNum])
+            
+                let tile = Tile(row: x-1, col: y, id: counter, effectId: chosenTiles[randomNum].effectId, tileType: chosenTiles[randomNum].tileType, tile: chosenTiles[randomNum].tile)
                 
                 GameScene.tiles.append(tile)
                 
