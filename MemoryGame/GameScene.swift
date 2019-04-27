@@ -296,9 +296,9 @@ class GameScene: SKScene {
 
         for _ in 0...2{
             
-            let chosenOffenseTile = Int(arc4random_uniform(UInt32(Tiles.offenseTiles.count)))
-            let chosenDefenseTile = Int(arc4random_uniform(UInt32(Tiles.defenseTiles.count)))
-            let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count)))
+            let chosenOffenseTile = Int(arc4random_uniform(UInt32(Tiles.offenseTiles.count - 1)))
+            let chosenDefenseTile = Int(arc4random_uniform(UInt32(Tiles.defenseTiles.count - 1)))
+            let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count - 1)))
             
             let offenseTile = Tile(row: 0, col: 0, id: 0, effectId: chosenOffenseTile, tileType: TileType.offense, tile: Tiles.offenseTiles[chosenOffenseTile])
             
