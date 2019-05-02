@@ -8,9 +8,11 @@
 import SpriteKit
 
 class Tiles{
-    public static let offenseTiles = [SKTexture(imageNamed:"offense_tile_1"), SKTexture(imageNamed:"offense_tile_2"), SKTexture(imageNamed:"offense_tile_3"), SKTexture(imageNamed:"offense_tile_4")]
+    public static let shouTiles = [SKTexture(imageNamed:"Cleave"), SKTexture(imageNamed:"Zan-Kei"), SKTexture(imageNamed: "Power_Slash"), SKTexture(imageNamed: "Lightning_Slash")]
     
-    public static let defenseTiles = [SKTexture(imageNamed:"defense_tile_1"), SKTexture(imageNamed:"defense_tile_2"), SKTexture(imageNamed:"defense_tile_3"), SKTexture(imageNamed:"defense_tile_4")]
+    public static let rikkouTiles = [SKTexture(imageNamed:"Agi"), SKTexture(imageNamed:"Bufu"), SKTexture(imageNamed: "Zio"), SKTexture(imageNamed: "Hama")]
+    
+    public static let emilyTiles = [SKTexture(imageNamed:"Arrow_Rain"), SKTexture(imageNamed:"Frost_Shot"), SKTexture(imageNamed: "Torrent_Shot"), SKTexture(imageNamed: "Holy_Arrow")]
     
     public static let healingTiles = [SKTexture(imageNamed:"healing_tile_1"), SKTexture(imageNamed:"healing_tile_2"), SKTexture(imageNamed:"healing_tile_3"), SKTexture(imageNamed:"healing_tile_4")]
 }

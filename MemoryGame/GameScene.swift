@@ -33,13 +33,17 @@ class GameScene: SKScene {
     let background_upper = SKSpriteNode(imageNamed: "crystalCave_top")
     let healthBar = SKSpriteNode(imageNamed: "health_bar")
     let healthBarAmount = SKSpriteNode(imageNamed: "health_bar_amount")
-    let goldCounterIcon = SKSpriteNode(imageNamed: "coin_icon")
+    let goldCounterIcon = SKSpriteNode(imageNamed: "spr_matches_0")
     let goldCounterLabel = SKLabelNode(fontNamed: "Eight Bit Dragon")
     
     let enemyHealthBar = SKSpriteNode(imageNamed: "enemy_health_bar")
     let enemyHealthBarAmount = SKSpriteNode(imageNamed: "enemy_health_bar_amount")
     
     let potionButton = SKSpriteNode(imageNamed: "spr_potion_0")
+    
+    let damageCounterLabel = SKLabelNode(fontNamed: "Eight Bit Dragon")
+    
+    var playerSprite = SKSpriteNode()
     
     var enemySprite = SKSpriteNode()
     
@@ -67,14 +71,12 @@ class GameScene: SKScene {
         GameScene.chosenNode2 = nil
         
         print("Turns: \(GameScene.turns)")
-        
     }
     
     override func update(_ currentTime: TimeInterval) {
         if (GameScene.turns <= 0){
-            playerTurnEnded()
-            beginEnemyTurn()
-            playerStats.revertToBaseValues()
+            let waitBetweenTurns = SKAction.wait(forDuration: 2) //This may be temporary
+            self.run(SKAction.sequence([SKAction.run{ self.playerTurnEnded() } , waitBetweenTurns, SKAction.run{ self.beginEnemyTurn() }, SKAction.run{ self.playerStats.revertToBaseValues() }]))
             
             GameScene.pairedTiles = [SKNode]()
             GameScene.tiles = [Tile]()
@@ -84,7 +86,7 @@ class GameScene: SKScene {
             
             GameScene.gameStarted = false
             
-            setupGrid()
+            self.setupGrid()
             
             GameScene.turns = 3
         }
@@ -102,7 +104,7 @@ class GameScene: SKScene {
         } else if (enemyStats.health <= 0){
             enemyHealthBarAmount.xScale = 0/CGFloat(enemyStats.maxHealth)
         }
-        
+
         goldCounterLabel.text = String(GameScene.gold)
     }
     
@@ -119,33 +121,33 @@ class GameScene: SKScene {
         background_upper.zPosition = 0
         addChild(background_upper)
         
-        healthBar.position = CGPoint(x: frame.size.width / 3.3, y: frame.size.height/2)
+        healthBar.position = CGPoint(x: frame.size.width / 3, y: frame.size.height/2)
         healthBar.zPosition = 4
         addChild(healthBar)
         
         healthBarAmount.zPosition = 3
         healthBarAmount.xScale = CGFloat(playerStats.health) / CGFloat(playerStats.maxHealth)
-        healthBarAmount.position = CGPoint(x: frame.size.width / 25, y: frame.size.height/2)
+        healthBarAmount.position = CGPoint(x: frame.size.width / 15, y: frame.size.height/2)
         healthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(healthBarAmount)
         
         goldCounterIcon.zPosition = 3
-        goldCounterIcon.position = CGPoint(x: frame.size.width/2 + 130, y: frame.size.height/2)
+        goldCounterIcon.position = CGPoint(x: frame.size.width/2 + 115, y: frame.size.height/2)
         addChild(goldCounterIcon)
         
         goldCounterLabel.zPosition = 3
-        goldCounterLabel.position = CGPoint (x: frame.size.width/2 + 160, y: goldCounterIcon.position.y - 15)
-        
+        goldCounterLabel.position = CGPoint (x: frame.size.width/2 + 153, y: goldCounterIcon.position.y - 15)
+        goldCounterLabel.fontSize = 26
         goldCounterLabel.text = String(GameScene.gold)
         goldCounterLabel.fontColor = UIColor.black
         addChild(goldCounterLabel)
         
         potionButton.zPosition = 3
-        potionButton.position = CGPoint(x: healthBar.position.x * 2.98, y: goldCounterIcon.position.y - 50)
+        potionButton.position = CGPoint(x: frame.size.width/2 + 150, y: frame.size.height/2 - 50)
         addChild(potionButton)
         
         var tapAnimationTextures = [SKTexture]()
-        
+
         for counter in 0...7{
             tapAnimationTextures.append(SKTexture(imageNamed: "tap_effect_\(counter)"))
         }
@@ -153,10 +155,13 @@ class GameScene: SKScene {
         tapAnimation = SKAction.animate(with: tapAnimationTextures, timePerFrame: 0.05)
         
         addChild(tapObject)
+        
+        damageCounterLabel.fontSize = 12
+        damageCounterLabel.zPosition = 10
     }
     
     func setupCharacters(){
-        let playerSprite = SKSpriteNode(imageNamed: "spr_\(CharacterSelection.selectedCharacter.name)_idle_0")
+        playerSprite = SKSpriteNode(imageNamed: "spr_\(CharacterSelection.selectedCharacter.name)_idle_0")
         
         var playerSprites: [SKTexture] = []
         
@@ -263,29 +268,51 @@ class GameScene: SKScene {
         print("Player Attack Stat: \(playerStats.attackStat)")
         print("Player Defense Stat: \(playerStats.defenseStat)")
         
-        enemyStats.health -= (playerStats.attackStat - (playerStats.attackStat * (enemyStats.defenseStat/100)))
+        let damage = (playerStats.attackStat - (playerStats.attackStat * (enemyStats.defenseStat/100)))
+        enemyStats.health -= damage
         
-        if (enemyStats.health <= 0){
-            GameScene.gameStarted = false
-            print ("You win!")
-            
-            let enemyDeathSpriteAnimation = SKAction.animate (with: enemyDeathAnimationTextures, timePerFrame: 0.4)
-            
-            enemySprite.run(enemyDeathSpriteAnimation, completion: {
-                self.enemySprite.removeFromParent()
-                self.enemyList.remove(at: 0)
+        damageCounterLabel.text = "\(damage)"
+        damageCounterLabel.position = enemySprite.position
+        addChild(damageCounterLabel)
+        
+        let wait = SKAction.wait(forDuration: 3)
+        let run = SKAction.run {
+            self.damageCounterLabel.removeFromParent()
+            if (self.enemyStats.health <= 0){
+                GameScene.gameStarted = false
+                print ("You win!")
                 
-                if (self.enemyList.count > 0){
-                    self.generateEnemies()
-                } else {
-                    print("All enemies defeated!")
-                }
-            })
+                let enemyDeathSpriteAnimation = SKAction.animate (with: self.enemyDeathAnimationTextures, timePerFrame: 0.4)
+                
+                self.enemySprite.run(enemyDeathSpriteAnimation, completion: {
+                    self.enemySprite.removeFromParent()
+                    self.enemyList.remove(at: 0)
+                    
+                    if (self.enemyList.count > 0){
+                        self.generateEnemies()
+                    } else {
+                        print("All enemies defeated!")
+                    }
+                })
+            }
+
         }
+        self.run(SKAction.sequence([wait, run]))
     }
     
     func beginEnemyTurn(){
-        playerStats.health -= (enemyStats.attackStat - (enemyStats.attackStat * (playerStats.defenseStat/100)))
+        
+        let damage = (enemyStats.attackStat - (enemyStats.attackStat * (playerStats.defenseStat/100)))
+        playerStats.health -= damage
+        damageCounterLabel.text = "\(damage)"
+        damageCounterLabel.position = playerSprite.position
+     
+        let wait = SKAction.wait(forDuration: 3)
+        let run = SKAction.run {
+            self.damageCounterLabel.removeFromParent()
+        }
+        self.run(SKAction.sequence([wait, run]))
+        
     }
     
     func generateTiles(){
@@ -293,21 +320,28 @@ class GameScene: SKScene {
         var counter = 0
         
         var chosenTiles = [Tile]()
+        var characterTileArray = [SKTexture]()
+        
+        switch CharacterSelection.selectedCharacter.name {
+        case "Shou":
+            characterTileArray = Tiles.shouTiles
+        case "Emily":
+            characterTileArray = Tiles.emilyTiles
+        case "Rikko":
+            characterTileArray = Tiles.rikkouTiles
+        default:
+            print("GenerateTiles() switch case defaulted!")
+            characterTileArray = Tiles.shouTiles
+        }
+        
 
-        for _ in 0...2{
-            
-            let chosenOffenseTile = Int(arc4random_uniform(UInt32(Tiles.offenseTiles.count - 1)))
-            let chosenDefenseTile = Int(arc4random_uniform(UInt32(Tiles.defenseTiles.count - 1)))
+        for counter in 0...3{
             let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count - 1)))
             
-            let offenseTile = Tile(row: 0, col: 0, id: 0, effectId: chosenOffenseTile, tileType: TileType.offense, tile: Tiles.offenseTiles[chosenOffenseTile])
+            let moveTile = Tile(row: 0, col: 0, id: 0, effectId: counter, tileType: TileType.offense, tile: characterTileArray[counter])
+            let healingTile  = Tile(row: 0, col: 0, id: 0, effectId: chosenHealingTile, tileType: TileType.healing, tile: Tiles.healingTiles[chosenHealingTile])
             
-            let defenseTile = Tile(row: 0, col: 0, id: 0, effectId: chosenDefenseTile, tileType: TileType.defense, tile: Tiles.defenseTiles[chosenDefenseTile])
-            
-            let healingTile = Tile(row: 0, col: 0, id: 0, effectId: chosenHealingTile, tileType: TileType.healing, tile: Tiles.healingTiles[chosenHealingTile])
-            
-            chosenTiles.append(offenseTile)
-            chosenTiles.append(defenseTile)
+            chosenTiles.append(moveTile)
             
             if (GameScene.healthPotionActivated){
                 chosenTiles.append(healingTile)
