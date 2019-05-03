@@ -19,7 +19,6 @@
 		E508E77722262F5C00145551 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E508E77622262F5C00145551 /* Tile.swift */; };
 		E55CAF9822565E6F0003E459 /* Tiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CAF9722565E6F0003E459 /* Tiles.swift */; };
 		E57DEAF3223114970071B512 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57DEAF2223114970071B512 /* Player.swift */; };
-		E57DEAF522311C650071B512 /* TileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57DEAF422311C650071B512 /* TileType.swift */; };
 		E59716D22273586600939FCF /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59716D12273586600939FCF /* Move.swift */; };
 		E59716D42273588200939FCF /* Movesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59716D32273588200939FCF /* Movesets.swift */; };
 		E59716D62273589F00939FCF /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59716D52273589F00939FCF /* PlayerController.swift */; };
@@ -67,7 +66,6 @@
 		E508E77622262F5C00145551 /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		E55CAF9722565E6F0003E459 /* Tiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tiles.swift; sourceTree = "<group>"; };
 		E57DEAF2223114970071B512 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
-		E57DEAF422311C650071B512 /* TileType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileType.swift; sourceTree = "<group>"; };
 		E59716D12273586600939FCF /* Move.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		E59716D32273588200939FCF /* Movesets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Movesets.swift; sourceTree = "<group>"; };
 		E59716D52273589F00939FCF /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
@@ -171,7 +169,6 @@
 		E5DE31352243A51A007EB9F1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				E57DEAF422311C650071B512 /* TileType.swift */,
 				E5DE312122439F25007EB9F1 /* Sounds.swift */,
 				E5E8541A2240ADBF000A3ACE /* Enemies.swift */,
 				E508E77622262F5C00145551 /* Tile.swift */,
@@ -334,7 +331,6 @@
 				E59716D62273589F00939FCF /* PlayerController.swift in Sources */,
 				E5DDFA36223A2F9E000B209D /* MainMenuScene.swift in Sources */,
 				E508E74722262E3400145551 /* GameScene.swift in Sources */,
-				E57DEAF522311C650071B512 /* TileType.swift in Sources */,
 				E5DE312222439F25007EB9F1 /* Sounds.swift in Sources */,
 				E508E74922262E3400145551 /* GameViewController.swift in Sources */,
 				E55CAF9822565E6F0003E459 /* Tiles.swift in Sources */,

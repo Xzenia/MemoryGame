@@ -14,16 +14,23 @@ class Tile {
     var col : Int
     var tile : SKTexture
     var effectId: Int
+    var character: String
     var tileType: TileType
     var id: Int
     
-    init (row: Int, col: Int, id: Int, effectId: Int, tileType: TileType, tile: SKTexture){
+    init (row: Int, col: Int, id: Int, effectId: Int, character: String, tile: SKTexture, tileType: TileType){
         self.row = row
         self.col = col
         self.id = id
         self.effectId = effectId
-        self.tileType = tileType
+        self.character = character
         self.tile = tile
+        self.tileType = tileType
     }
 
+}
+
+enum TileType{
+    case Move
+    case Item
 }

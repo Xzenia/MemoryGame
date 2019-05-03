@@ -52,6 +52,8 @@ class GameScene: SKScene {
     
     var tapObject = SKSpriteNode(imageNamed: "tap_effect_0")
     var tapAnimation = SKAction()
+
+    let playerController = PlayerController()
     
     override func didMove(to view: SKView) {
         
@@ -71,15 +73,14 @@ class GameScene: SKScene {
         GameScene.chosenNode2 = nil
         
         print("Turns: \(GameScene.turns)")
+
     }
     
     override func update(_ currentTime: TimeInterval) {
         if (GameScene.turns <= 0){
-            let waitBetweenTurns = SKAction.wait(forDuration: 2) //This may be temporary
-            self.run(SKAction.sequence([SKAction.run{ self.playerTurnEnded() } , waitBetweenTurns, SKAction.run{ self.beginEnemyTurn() }, SKAction.run{ self.playerStats.revertToBaseValues() }]))
             
-            GameScene.pairedTiles = [SKNode]()
-            GameScene.tiles = [Tile]()
+            playerTurnEnded()
+            playerStats.revertToBaseValues()
             
             GameScene.chosenNode1 = nil
             GameScene.chosenNode2 = nil
@@ -220,48 +221,25 @@ class GameScene: SKScene {
         for tile in GameScene.pairedTiles{
             let pairedTile = GameScene.tiles[Int(tile.name!)!]
             
-            if (pairedTile.tileType == TileType.offense){
+            if (pairedTile.tileType == TileType.Item){
                 switch pairedTile.effectId {
-                case 0:
-                    playerStats.increaseAttackStat(increase: 10)
                 case 1:
-                    playerStats.increaseAttackStat(increase: 20)
-                case 2:
-                    playerStats.increaseAttackStat(increase: 30)
-                case 3:
-                    playerStats.increaseAttackStat(increase: 40)
-                default:
-                    playerStats.increaseAttackStat(increase: 10)
-                }
-            }
-                
-            else if (pairedTile.tileType == TileType.defense){
-                switch pairedTile.effectId {
-                case 0:
-                    playerStats.increaseDefenseStat(increase: 10)
-                case 1:
-                    playerStats.increaseDefenseStat(increase: 20)
-                case 2:
-                    playerStats.increaseDefenseStat(increase: 30)
-                case 3:
-                    playerStats.increaseDefenseStat(increase: 40)
-                default:
-                    playerStats.increaseDefenseStat(increase: 10)
-                }
-            }
-            else if (pairedTile.tileType == TileType.healing){
-                switch pairedTile.effectId {
-                case 0:
                     playerStats.increaseHealth(increase: 10)
-                case 1:
-                    playerStats.increaseHealth(increase: 20)
                 case 2:
-                    playerStats.increaseHealth(increase: 30)
+                    playerStats.increaseHealth(increase: 20)
                 case 3:
+                    playerStats.increaseHealth(increase: 30)
+                case 4:
                     playerStats.increaseHealth(increase: 40)
                 default:
                     playerStats.increaseHealth(increase: 10)
                 }
+            }
+            else if (pairedTile.tileType == TileType.Move){
+                let move = playerController.generateMove(pairedTile: pairedTile)
+                print("Move name: \(move.name)")
+                playerStats.increaseAttackStat(increase: move.attack)
+                playerStats.increaseDefenseStat(increase: move.defense)
             }
         }
         
@@ -295,9 +273,12 @@ class GameScene: SKScene {
                     }
                 })
             }
-
+        
         }
-        self.run(SKAction.sequence([wait, run]))
+        self.run(SKAction.sequence([wait, run, SKAction.run{self.beginEnemyTurn()}]))
+        
+        GameScene.pairedTiles = [SKNode]()
+        GameScene.tiles = [Tile]()
     }
     
     func beginEnemyTurn(){
@@ -306,8 +287,8 @@ class GameScene: SKScene {
         playerStats.health -= damage
         damageCounterLabel.text = "\(damage)"
         damageCounterLabel.position = playerSprite.position
-     
-        let wait = SKAction.wait(forDuration: 3)
+        addChild(damageCounterLabel)
+        let wait = SKAction.wait(forDuration: 2)
         let run = SKAction.run {
             self.damageCounterLabel.removeFromParent()
         }
@@ -333,13 +314,13 @@ class GameScene: SKScene {
             print("GenerateTiles() switch case defaulted!")
             characterTileArray = Tiles.shouTiles
         }
-        
-
-        for counter in 0...3{
-            let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count - 1)))
+    
+        for counter in 1...4{
             
-            let moveTile = Tile(row: 0, col: 0, id: 0, effectId: counter, tileType: TileType.offense, tile: characterTileArray[counter])
-            let healingTile  = Tile(row: 0, col: 0, id: 0, effectId: chosenHealingTile, tileType: TileType.healing, tile: Tiles.healingTiles[chosenHealingTile])
+            let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count - 1))) + 1
+            
+            let moveTile = Tile(row: 0, col: 0, id: 0, effectId: counter, character: CharacterSelection.selectedCharacter.name, tile: characterTileArray[counter - 1], tileType: TileType.Move)
+            let healingTile  = Tile(row: 0, col: 0, id: 0, effectId: chosenHealingTile, character: "", tile: Tiles.healingTiles[chosenHealingTile], tileType: TileType.Item)
             
             chosenTiles.append(moveTile)
             
@@ -354,10 +335,11 @@ class GameScene: SKScene {
             var y = 0
             while y < cols {
                 let randomNum = Int(arc4random_uniform(UInt32(chosenTiles.count)))
-            
-                let tile = Tile(row: x-1, col: y, id: counter, effectId: chosenTiles[randomNum].effectId, tileType: chosenTiles[randomNum].tileType, tile: chosenTiles[randomNum].tile)
                 
-                GameScene.tiles.append(tile)
+                chosenTiles[randomNum].row = x - 1
+                chosenTiles[randomNum].col = y
+                chosenTiles[randomNum].id = counter
+                GameScene.tiles.append(chosenTiles[randomNum])
                 
                 counter = counter + 1
                 y = y + 1
@@ -452,35 +434,4 @@ class GameScene: SKScene {
         }
     }
     
-    func sortList(_list: [Enemy]) -> [Enemy]{
-        var beginningIndex = 0
-        var endingIndex = _list.count - 1
-        
-        var list = _list
-        
-        //Decreases the amount of comparisons that insertion sort has to do.
-        while beginningIndex < endingIndex{
-            if ((list[beginningIndex].attackStat + list[endingIndex].defenseStat) > (list[beginningIndex].attackStat + list[endingIndex].defenseStat)){
-                let temp = list[beginningIndex]
-                list[beginningIndex] = list[endingIndex]
-                list[endingIndex] = temp
-            }
-            beginningIndex = beginningIndex + 1
-            endingIndex = endingIndex - 1
-        }
-        
-        //Insertion Sort
-        for j in 1...list.count - 1 {
-            let key = list[j].attackStat + list[j].defenseStat
-            var i = j - 1
-            
-            while(i >= 0 && (list[j].attackStat + list[j].defenseStat) > key){
-                list[i + 1] = list[i]
-                i = i - 1
-            }
-            
-            list[i + 1] = list[j]
-        }
-        return list
-    }
-}
+ }
