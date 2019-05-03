@@ -45,6 +45,22 @@ public class PlayerController{
             }
         }
         
+        else if (pairedTile.character == "Emily"){
+            switch pairedTile.effectId{
+            case 1:
+                playerMove = Movesets.arrowRain
+            case 2:
+                playerMove = Movesets.frostShot
+            case 3:
+                playerMove = Movesets.holyArrow
+            case 4:
+                playerMove = Movesets.torrentShot
+            default:
+                print("GenerateMove() defaulted!")
+                playerMove = Movesets.arrowRain
+
+            }
+        }
         return playerMove
     }
 }

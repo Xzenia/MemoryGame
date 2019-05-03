@@ -9,7 +9,7 @@ public class Move
     var attack: Float
     var defense: Float
     
-    init(_id: Int, _name: String = "", _description: String = "", _attack: Float, _defense: Float){
+    init(_id: Int, _name: String = "", _description: String = "", _attack: Float, _defense: Float = 0){
         id = _id
         name = _name
         description = _description
