@@ -11,7 +11,6 @@ import SpriteKit
 class MainMenuScene: SKScene{
 
     let playButton = SKSpriteNode(imageNamed: "spr_play_0")
-    let exitButton = SKSpriteNode(imageNamed: "spr_exit_0")
     let title = SKSpriteNode(imageNamed: "spr_title_0")
     
     var tapObject = SKSpriteNode(imageNamed: "tap_effect_0")
@@ -26,10 +25,7 @@ class MainMenuScene: SKScene{
         
         playButton.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
         addChild(playButton)
-        
-        exitButton.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2 - 120)
-        addChild(exitButton)
-        
+    
         var tapAnimationTextures = [SKTexture]()
         
         for counter in 0...7{

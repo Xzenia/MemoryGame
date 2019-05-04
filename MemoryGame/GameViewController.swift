@@ -11,6 +11,8 @@ import SpriteKit
 
 class GameViewController: UIViewController {
     
+    public static var currentLevel = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

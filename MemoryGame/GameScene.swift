@@ -13,7 +13,7 @@ class GameScene: SKScene {
     
     public static var turns = 3
     
-    public static var gold = 0
+    public static var matches = 0
     
     public static var gameStarted = false
     
@@ -29,8 +29,6 @@ class GameScene: SKScene {
     var enemyDeathAnimationTextures = [SKTexture]()
     
     //UI Elements
-    let background_lower = SKSpriteNode(imageNamed: "crystalCave_bottom")
-    let background_upper = SKSpriteNode(imageNamed: "crystalCave_top")
     let healthBar = SKSpriteNode(imageNamed: "health_bar")
     let healthBarAmount = SKSpriteNode(imageNamed: "health_bar_amount")
     let goldCounterIcon = SKSpriteNode(imageNamed: "spr_matches_0")
@@ -73,6 +71,8 @@ class GameScene: SKScene {
         GameScene.chosenNode2 = nil
         
         print("Turns: \(GameScene.turns)")
+        
+        GameScene.matches = 0
 
     }
     
@@ -106,10 +106,31 @@ class GameScene: SKScene {
             enemyHealthBarAmount.xScale = 0/CGFloat(enemyStats.maxHealth)
         }
 
-        goldCounterLabel.text = String(GameScene.gold)
+        goldCounterLabel.text = String(GameScene.matches)
     }
     
     func setupUI(){
+        
+        var background_lower = SKSpriteNode()
+        var background_upper = SKSpriteNode()
+        
+        if (GameViewController.currentLevel == 0){
+            background_lower = SKSpriteNode(imageNamed: "darkForest_bottom")
+            background_upper = SKSpriteNode(imageNamed: "darkForest_top")
+        }
+        else if (GameViewController.currentLevel == 1){
+            background_lower = SKSpriteNode(imageNamed: "crystalCave_bottom")
+            background_upper = SKSpriteNode(imageNamed: "crystalCave_top")
+        }
+        else if (GameViewController.currentLevel == 2){
+            background_lower = SKSpriteNode(imageNamed: "darkForest_bottom")
+            background_upper = SKSpriteNode(imageNamed: "darkForest_top")
+        }
+        else {
+            background_lower = SKSpriteNode(imageNamed: "darkForest_bottom")
+            background_upper = SKSpriteNode(imageNamed: "darkForest_top")
+        }
+        
         background_lower.size.width = CGFloat(frame.size.width)
         background_lower.size.height = CGFloat(frame.size.height)
         background_lower.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2)
@@ -139,7 +160,7 @@ class GameScene: SKScene {
         goldCounterLabel.zPosition = 3
         goldCounterLabel.position = CGPoint (x: frame.size.width/2 + 153, y: goldCounterIcon.position.y - 15)
         goldCounterLabel.fontSize = 26
-        goldCounterLabel.text = String(GameScene.gold)
+        goldCounterLabel.text = String(GameScene.matches)
         goldCounterLabel.fontColor = UIColor.black
         addChild(goldCounterLabel)
         
@@ -159,6 +180,8 @@ class GameScene: SKScene {
         
         damageCounterLabel.fontSize = 12
         damageCounterLabel.zPosition = 10
+        
+        print("Current Level: \(GameViewController.currentLevel)")
     }
     
     func setupCharacters(){
@@ -269,7 +292,10 @@ class GameScene: SKScene {
                     if (self.enemyList.count > 0){
                         self.generateEnemies()
                     } else {
-                        print("All enemies defeated!")
+                        let levelCompletionScene = LevelCompletionScene(size: (self.view?.bounds.size)!)
+                        let transition = SKTransition.flipVertical(withDuration: 1.0)
+                        levelCompletionScene.scaleMode = SKSceneScaleMode.aspectFill
+                        self.view?.presentScene(levelCompletionScene, transition: transition)
                     }
                 })
             }
@@ -433,5 +459,4 @@ class GameScene: SKScene {
             x = x + 1
         }
     }
-    
  }

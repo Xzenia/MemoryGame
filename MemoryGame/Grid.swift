@@ -97,7 +97,7 @@ class Grid:SKSpriteNode {
                         
                         GameScene.turns -= 1
                         
-                        GameScene.gold += 1
+                        GameScene.matches += 1
                     
                         print("Turns: \(GameScene.turns)")
                     } else {
