@@ -390,7 +390,10 @@ class GameScene: SKScene {
         
         tempList.append(Enemies.kyub)
         tempList.append(Enemies.kown)
-        
+        tempList.append(Enemies.spyr)
+        tempList.append(Enemies.prysm)
+        tempList.append(Enemies.polymorph)
+        tempList.append(Enemies.spark)
         tempList.shuffle()
         
         let numberOfEnemies = Int(arc4random_uniform(8)) + 2
