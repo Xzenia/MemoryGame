@@ -13,6 +13,8 @@ class Grid:SKSpriteNode {
     var cols:Int!
     var blockSize:CGFloat!
     
+    public static var chosenPairs = [SKNode]()
+    
     convenience init?(blockSize:CGFloat,rows:Int,cols:Int) {
         guard let texture = Grid.gridTexture(blockSize: blockSize,rows: rows, cols:cols) else {
             return nil
@@ -49,7 +51,7 @@ class Grid:SKSpriteNode {
         }
         
         SKColor.black.setStroke()
-        bezierPath.lineWidth = 1.0
+        bezierPath.lineWidth = 5.0
         bezierPath.stroke()
         context.addPath(bezierPath.cgPath)
         let image = UIGraphicsGetImageFromCurrentImageContext()
@@ -78,22 +80,26 @@ class Grid:SKSpriteNode {
                     let action = SKAction.setTexture(tileTexture)
                     node.run(action)
                     
-                    if (GameScene.chosenNode1 == nil){
-                        GameScene.chosenNode1 = node
-                    } else {
-                        GameScene.chosenNode2 = node
+                    if (Grid.chosenPairs.count == 1){
+                        Grid.chosenPairs.append(node)
+                    } else if (Grid.chosenPairs.count == 0){
+                        Grid.chosenPairs.append(node)
                     }
                 }
 
-                if (GameScene.chosenNode1 != nil && GameScene.chosenNode2 != nil){
-                    if (GameScene.chosenNode1 == GameScene.chosenNode2){
+                if (Grid.chosenPairs.count > 1){
+                    if (Grid.chosenPairs[0] == Grid.chosenPairs[1]){
                         print("Selected the same node!")
-                        changeTilesToDefault()
-                        setSelectedNodesToNil()
-                    } else if (GameScene.tiles[Int(GameScene.chosenNode1.name!)!].tile == GameScene.tiles[Int(GameScene.chosenNode2.name!)!].tile){
+                        
+                        let action = SKAction.setTexture(GameScene.defaultTile)
+                        Grid.chosenPairs[0].run(action)
+                        
+                        Grid.chosenPairs.removeAll()
+                        
+                    } else if (GameScene.tiles[Int(Grid.chosenPairs[0].name!)!].tile == GameScene.tiles[Int(Grid.chosenPairs[1].name!)!].tile){
                         print("Both tiles are similar!")
-                        GameScene.pairedTiles.append(GameScene.chosenNode1)
-                        setSelectedNodesToNil()
+                        GameScene.pairedTiles.append(Grid.chosenPairs[0])
+                        Grid.chosenPairs.removeAll()
                         
                         GameScene.turns -= 1
                         
@@ -102,18 +108,12 @@ class Grid:SKSpriteNode {
                         print("Turns: \(GameScene.turns)")
                     } else {
                         print("Both tiles are not similar!")
-
-                        let wait = SKAction.wait(forDuration: 0.5)
-                        let run = SKAction.run {
-                            self.changeTilesToDefault()
-                            self.setSelectedNodesToNil()
-                            GameScene.turns -= 1                            
-
-                            print("Turns: \(GameScene.turns)")
-                        }
-                        self.run(SKAction.sequence([wait, run]))
+                        
+                        GameScene.turns -= 1
+                        print("Turns: \(GameScene.turns)")
+                        
+                        Grid.chosenPairs.removeAll()
                     }
-
                 }
                 
             } else {
@@ -124,16 +124,5 @@ class Grid:SKSpriteNode {
                 print("\(row) \(col)")
             }
         }
-    }
-    
-    func setSelectedNodesToNil(){
-        GameScene.chosenNode1 = nil
-        GameScene.chosenNode2 = nil
-    }
-    
-    func changeTilesToDefault(){
-        let action = SKAction.setTexture(GameScene.defaultTile)
-        GameScene.chosenNode1.run(action)
-        GameScene.chosenNode2.run(action)
     }
 }

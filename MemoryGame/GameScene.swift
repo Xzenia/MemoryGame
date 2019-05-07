@@ -6,9 +6,6 @@ class GameScene: SKScene {
     
     public static var pairedTiles = [SKNode]()
     
-    public static var chosenNode1 : SKNode!
-    public static var chosenNode2 : SKNode!
-    
     public static var defaultTile : SKTexture! = SKTexture(imageNamed: "tile_0")
     
     public static var turns = 3
@@ -67,8 +64,7 @@ class GameScene: SKScene {
         setupGrid()
         addChild(grid)
         
-        GameScene.chosenNode1 = nil
-        GameScene.chosenNode2 = nil
+        Grid.chosenPairs.removeAll()
         
         print("Turns: \(GameScene.turns)")
         
@@ -82,8 +78,7 @@ class GameScene: SKScene {
             playerTurnEnded()
             playerStats.revertToBaseValues()
             
-            GameScene.chosenNode1 = nil
-            GameScene.chosenNode2 = nil
+            Grid.chosenPairs.removeAll()
             
             GameScene.gameStarted = false
             
@@ -283,7 +278,7 @@ class GameScene: SKScene {
                 GameScene.gameStarted = false
                 print ("You win!")
                 
-                let enemyDeathSpriteAnimation = SKAction.animate (with: self.enemyDeathAnimationTextures, timePerFrame: 0.4)
+                let enemyDeathSpriteAnimation = SKAction.animate (with: self.enemyDeathAnimationTextures, timePerFrame: 0.3)
                 
                 self.enemySprite.run(enemyDeathSpriteAnimation, completion: {
                     self.enemySprite.removeFromParent()
@@ -292,6 +287,7 @@ class GameScene: SKScene {
                     if (self.enemyList.count > 0){
                         self.generateEnemies()
                     } else {
+                        self.removeAllChildren()
                         let levelCompletionScene = LevelCompletionScene(size: (self.view?.bounds.size)!)
                         let transition = SKTransition.flipVertical(withDuration: 1.0)
                         levelCompletionScene.scaleMode = SKSceneScaleMode.aspectFill
@@ -299,9 +295,14 @@ class GameScene: SKScene {
                     }
                 })
             }
-        
+            
         }
-        self.run(SKAction.sequence([wait, run, SKAction.run{self.beginEnemyTurn()}]))
+        let beginEnemyTurn = SKAction.run{
+            if (self.enemyStats.health > 0){
+                self.beginEnemyTurn()
+            }
+        }
+        self.run(SKAction.sequence([wait, run, beginEnemyTurn]))
         
         GameScene.pairedTiles = [SKNode]()
         GameScene.tiles = [Tile]()
