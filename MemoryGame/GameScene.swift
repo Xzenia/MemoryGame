@@ -2,9 +2,9 @@ import SpriteKit
 
 class GameScene: SKScene {
     
-    public static var tiles = [Tile]()
+    public static var tiles: [Tile]!
     
-    public static var pairedTiles = [SKNode]()
+    public static var pairedTiles: [SKNode]!
     
     public static var defaultTile : SKTexture! = SKTexture(imageNamed: "tile_0")
     
@@ -16,7 +16,7 @@ class GameScene: SKScene {
     
     public static var healthPotionActivated = false
     
-    public var enemyList = [Enemy]()
+    public var enemyList: [Enemy]!
     
     let rows: Int = 5
     let cols: Int = 5
@@ -44,6 +44,7 @@ class GameScene: SKScene {
     
     public var playerStats: Player!
     public var enemyStats: Enemy!
+
     
     var tapObject = SKSpriteNode(imageNamed: "tap_effect_0")
     var tapAnimation = SKAction()
@@ -54,6 +55,11 @@ class GameScene: SKScene {
         
         playerStats = CharacterSelection.selectedCharacter
         
+        GameScene.tiles = [Tile]()
+        GameScene.pairedTiles = [SKNode]()
+        
+        enemyList = [Enemy]()
+    
         setupUI()
         setupCharacters()
         
@@ -69,6 +75,8 @@ class GameScene: SKScene {
         print("Turns: \(GameScene.turns)")
         
         GameScene.matches = 0
+        
+        scene?.scaleMode = SKSceneScaleMode.resizeFill
 
     }
     
@@ -149,18 +157,18 @@ class GameScene: SKScene {
         addChild(healthBarAmount)
         
         goldCounterIcon.zPosition = 3
-        goldCounterIcon.position = CGPoint(x: frame.size.width/2 + 115, y: frame.size.height/2)
+        goldCounterIcon.position = CGPoint(x: frame.size.width/1.25, y: frame.size.height/2)
         addChild(goldCounterIcon)
         
         goldCounterLabel.zPosition = 3
-        goldCounterLabel.position = CGPoint (x: frame.size.width/2 + 153, y: goldCounterIcon.position.y - 15)
+        goldCounterLabel.position = CGPoint (x: frame.size.width/1.10, y: frame.size.height/2.08)
         goldCounterLabel.fontSize = 26
         goldCounterLabel.text = String(GameScene.matches)
         goldCounterLabel.fontColor = UIColor.black
         addChild(goldCounterLabel)
         
         potionButton.zPosition = 3
-        potionButton.position = CGPoint(x: frame.size.width/2 + 150, y: frame.size.height/2 - 50)
+        potionButton.position = CGPoint(x: frame.size.width/1.15, y: frame.size.height/2.5)
         addChild(potionButton)
         
         var tapAnimationTextures = [SKTexture]()
@@ -184,7 +192,7 @@ class GameScene: SKScene {
         
         var playerSprites: [SKTexture] = []
         
-        playerSprite.position = CGPoint(x: frame.size.width/5, y: frame.size.height - 150)
+        playerSprite.position = CGPoint(x: frame.size.width/5, y: frame.size.height/1.35)
         playerSprite.zPosition = 5
         
         if (CharacterSelection.selectedCharacter.animationFrame > 1){
@@ -206,7 +214,7 @@ class GameScene: SKScene {
         
         enemyHealthBarAmount.zPosition = 3
         enemyHealthBarAmount.xScale = CGFloat(enemyStats.health) / CGFloat(enemyStats.maxHealth)
-        enemyHealthBarAmount.position = CGPoint(x: frame.size.width/4.3, y: frame.size.height - 20)
+        enemyHealthBarAmount.position = CGPoint(x: enemyHealthBar.position.x/2.1, y: enemyHealthBar.position.y)
         enemyHealthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(enemyHealthBarAmount)
     }
@@ -287,7 +295,10 @@ class GameScene: SKScene {
                     if (self.enemyList.count > 0){
                         self.generateEnemies()
                     } else {
+                        self.enemyStats = nil
+                        self.grid.removeAllChildren()
                         self.removeAllChildren()
+                        
                         let levelCompletionScene = LevelCompletionScene(size: (self.view?.bounds.size)!)
                         let transition = SKTransition.flipVertical(withDuration: 1.0)
                         levelCompletionScene.scaleMode = SKSceneScaleMode.aspectFill
@@ -426,7 +437,7 @@ class GameScene: SKScene {
         let enemyIdleSpriteAnimation = SKAction.animate(with: enemyIdleAnimationTextures, timePerFrame: 0.2)
         enemySprite.run(SKAction.repeatForever(enemyIdleSpriteAnimation))
         
-        enemySprite.position = CGPoint(x: frame.size.width - 50, y: frame.size.height - 150)
+        enemySprite.position = CGPoint(x: frame.size.width/1.2, y: frame.size.height/1.35)
         enemySprite.zPosition = 5
         
         addChild(enemySprite)
