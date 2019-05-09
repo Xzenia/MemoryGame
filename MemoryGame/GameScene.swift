@@ -46,7 +46,7 @@ class GameScene: SKScene {
     public var enemyStats: Enemy!
 
     
-    var tapObject = SKSpriteNode(imageNamed: "tap_effect_0")
+    var tapObject = SKSpriteNode()
     var tapAnimation = SKAction()
 
     let playerController = PlayerController()
@@ -72,44 +72,10 @@ class GameScene: SKScene {
         
         Grid.chosenPairs.removeAll()
         
-        print("Turns: \(GameScene.turns)")
-        
         GameScene.matches = 0
         
         scene?.scaleMode = SKSceneScaleMode.resizeFill
 
-    }
-    
-    override func update(_ currentTime: TimeInterval) {
-        if (GameScene.turns <= 0){
-            
-            playerTurnEnded()
-            playerStats.revertToBaseValues()
-            
-            Grid.chosenPairs.removeAll()
-            
-            GameScene.gameStarted = false
-            
-            self.setupGrid()
-            
-            GameScene.turns = 3
-        }
-        
-        if (playerStats.health > 0){
-            healthBarAmount.xScale = CGFloat(playerStats.health)/CGFloat(playerStats.maxHealth)
-        } else if (playerStats.health <= 0){
-            healthBarAmount.xScale = 0/CGFloat(playerStats.maxHealth)
-            GameScene.gameStarted = false
-            print("Game over!")
-        }
-        
-        if (enemyStats.health > 0){
-            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
-        } else if (enemyStats.health <= 0){
-            enemyHealthBarAmount.xScale = 0/CGFloat(enemyStats.maxHealth)
-        }
-
-        goldCounterLabel.text = String(GameScene.matches)
     }
     
     func setupUI(){
@@ -172,7 +138,7 @@ class GameScene: SKScene {
         addChild(potionButton)
         
         var tapAnimationTextures = [SKTexture]()
-
+        
         for counter in 0...7{
             tapAnimationTextures.append(SKTexture(imageNamed: "tap_effect_\(counter)"))
         }
@@ -230,6 +196,39 @@ class GameScene: SKScene {
             GameScene.gameStarted = true
         }
         self.run(SKAction.sequence([wait, run]))
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        if (GameScene.turns <= 0){
+            
+            playerTurnEnded()
+            playerStats.revertToBaseValues()
+            
+            Grid.chosenPairs.removeAll()
+            
+            GameScene.gameStarted = false
+            
+            self.setupGrid()
+            
+            GameScene.turns = 3
+        }
+        
+        if (playerStats.health > 0){
+            healthBarAmount.xScale = CGFloat(playerStats.health)/CGFloat(playerStats.maxHealth)
+        } else if (playerStats.health <= 0){
+            healthBarAmount.xScale = 0/CGFloat(playerStats.maxHealth)
+            GameScene.gameStarted = false
+            
+            
+        }
+        
+        if (enemyStats.health > 0){
+            enemyHealthBarAmount.xScale = CGFloat(enemyStats.health)/CGFloat(enemyStats.maxHealth)
+        } else if (enemyStats.health <= 0){
+            enemyHealthBarAmount.xScale = 0/CGFloat(enemyStats.maxHealth)
+        }
+
+        goldCounterLabel.text = String(GameScene.matches)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -295,9 +294,11 @@ class GameScene: SKScene {
                     if (self.enemyList.count > 0){
                         self.generateEnemies()
                     } else {
-                        self.enemyList.removeAll()
+                        self.enemyList.removeAll() //Removes any remaining monsters from a previous level if there is any.
                         self.grid.removeAllChildren()
                         self.removeAllChildren()
+                        
+                        self.enemyStats = nil //Might fix bug where enemies appear with very little health in Level 3.
                         
                         let levelCompletionScene = LevelCompletionScene(size: (self.view?.bounds.size)!)
                         let transition = SKTransition.flipVertical(withDuration: 1.0)
@@ -326,10 +327,25 @@ class GameScene: SKScene {
         damageCounterLabel.text = "\(damage)"
         damageCounterLabel.position = playerSprite.position
         addChild(damageCounterLabel)
-        let wait = SKAction.wait(forDuration: 2)
+        let wait = SKAction.wait(forDuration: 3)
         let run = SKAction.run {
             self.damageCounterLabel.removeFromParent()
+            
+            if (self.playerStats.health <= 0){
+                self.enemyList.removeAll() //Removes any remaining monsters from a previous level if there is any.
+                self.grid.removeAllChildren()
+                self.removeAllChildren()
+                
+                self.enemyStats = nil //Might fix bug where enemies appear with very little health in Level 3.
+                
+                let gameOverScene = GameOverScene(size: (self.view?.bounds.size)!)
+                let transition = SKTransition.flipVertical(withDuration: 1.0)
+                gameOverScene.scaleMode = SKSceneScaleMode.aspectFill
+                self.view?.presentScene(gameOverScene, transition: transition)
+
+            }
         }
+        
         self.run(SKAction.sequence([wait, run]))
         
     }
