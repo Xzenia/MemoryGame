@@ -295,7 +295,7 @@ class GameScene: SKScene {
                     if (self.enemyList.count > 0){
                         self.generateEnemies()
                     } else {
-                        self.enemyStats = nil
+                        self.enemyList.removeAll()
                         self.grid.removeAllChildren()
                         self.removeAllChildren()
                         
