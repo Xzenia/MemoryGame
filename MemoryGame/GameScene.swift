@@ -69,11 +69,9 @@ class GameScene: SKScene {
         
         Grid.chosenPairs.removeAll()
         
-        
         GameScene.matches = 0
         
         scene?.scaleMode = SKSceneScaleMode.resizeFill
-
     }
     
     func setupUI(){
@@ -309,6 +307,7 @@ class GameScene: SKScene {
         self.run(SKAction.sequence([wait, run, beginEnemyTurn]))
         
         GameScene.pairedTiles = [SKNode]()
+        Grid.pairedTiles = [SKNode]()
         GameScene.tiles = [Tile]()
     }
     
@@ -332,7 +331,6 @@ class GameScene: SKScene {
                 let transition = SKTransition.flipVertical(withDuration: 1.0)
                 gameOverScene.scaleMode = SKSceneScaleMode.aspectFill
                 self.view?.presentScene(gameOverScene, transition: transition)
-
             }
         }
         
@@ -471,12 +469,17 @@ class GameScene: SKScene {
         while x <= rows {
             var y = 0
             while y < cols {
+                
+                let tileIdNode = SKNode()
+                tileIdNode.name = String(GameScene.tiles[counter].id)
+                
                 if (revealTiles){
                     tileSprite = SKSpriteNode(texture: GameScene.tiles[counter].tile)
                 } else {
                     tileSprite = SKSpriteNode(texture: GameScene.defaultTile)
                 }
                 
+                tileSprite.addChild(tileIdNode)
                 tileSprite.setScale(1.3)
                 tileSprite.zPosition = 3
                 tileSprite.position = grid.gridPosition(row: x-1, col: y)

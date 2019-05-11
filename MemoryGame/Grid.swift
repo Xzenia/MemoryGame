@@ -1,11 +1,3 @@
-//
-//  Grid.swift
-//  Test Project
-//
-//  Created by Metis on 19/02/2019.
-//  Copyright © 2019 Metis. All rights reserved.
-//
-
 import SpriteKit
 
 class Grid:SKSpriteNode {
@@ -14,6 +6,7 @@ class Grid:SKSpriteNode {
     var blockSize:CGFloat!
     
     public static var chosenPairs = [SKNode]()
+    public static var pairedTiles = [SKNode]() //Keeps track of all pairs of tiles 
     
     convenience init?(blockSize:CGFloat,rows:Int,cols:Int) {
         guard let texture = Grid.gridTexture(blockSize: blockSize,rows: rows, cols:cols) else {
@@ -82,9 +75,10 @@ class Grid:SKSpriteNode {
         for touch in touches {
             let position = touch.location(in:self)
             let node = atPoint(position)
-            
+            let setToDefaultTile = SKAction.setTexture(GameScene.defaultTile)
+
             if node != self {
-                if (!GameScene.pairedTiles.contains(node) && GameScene.turns > 0 && GameScene.gameStarted){
+                if (!Grid.pairedTiles.contains(node) && GameScene.turns > 0 && GameScene.gameStarted){
                     let tileTexture = GameScene.tiles[Int(node.name!)!].tile
                     let action = SKAction.setTexture(tileTexture)
                     node.run(action)
@@ -95,34 +89,44 @@ class Grid:SKSpriteNode {
                         Grid.chosenPairs.append(node)
                     }
                 }
-
+                
                 if (Grid.chosenPairs.count > 1){
+                    
                     if (Grid.chosenPairs[0] == Grid.chosenPairs[1]){
                         print("Selected the same node!")
-                        
-                        let action = SKAction.setTexture(GameScene.defaultTile)
-                        Grid.chosenPairs[0].run(action)
-                        
-                        Grid.chosenPairs.removeAll()
-                        
+                        Grid.chosenPairs[0].run(setToDefaultTile)
+
                     } else if (GameScene.tiles[Int(Grid.chosenPairs[0].name!)!].tile == GameScene.tiles[Int(Grid.chosenPairs[1].name!)!].tile){
                         print("Both tiles are similar!")
                         GameScene.pairedTiles.append(Grid.chosenPairs[0])
-                        Grid.chosenPairs.removeAll()
+                        
+                        Grid.pairedTiles.append(Grid.chosenPairs[0])
+                        Grid.pairedTiles.append(Grid.chosenPairs[1])
                         
                         GameScene.turns -= 1
-                        
                         GameScene.matches += 1
                     
                         print("Turns: \(GameScene.turns)")
+
                     } else {
                         print("Both tiles are not similar!")
                         
                         GameScene.turns -= 1
                         print("Turns: \(GameScene.turns)")
                         
-                        Grid.chosenPairs.removeAll()
+                        let chosenNode1 = Grid.chosenPairs[0]
+                        let chosenNode2 = Grid.chosenPairs[1]
+                        
+                        let wait = SKAction.wait(forDuration: 0.5)
+                        let run = SKAction.run {
+                            chosenNode1.run(setToDefaultTile)
+                            chosenNode2.run(setToDefaultTile)
+
+                        }
+                        self.run(SKAction.sequence([wait, run]))
                     }
+                    
+                    Grid.chosenPairs.removeAll()
                 }
                 
             } else {
