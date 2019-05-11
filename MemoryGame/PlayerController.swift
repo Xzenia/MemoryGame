@@ -73,7 +73,7 @@ func sortList(_list: [Enemy]) -> [Enemy]{
     
     //Decreases the amount of comparisons that insertion sort has to do.
     while beginningIndex < endingIndex{
-        if ((list[beginningIndex].attackStat + list[endingIndex].defenseStat) > (list[beginningIndex].attackStat + list[endingIndex].defenseStat)){
+        if ((list[beginningIndex].baseAttackStat + list[beginningIndex].baseDefenseStat) > (list[endingIndex].baseAttackStat + list[endingIndex].baseDefenseStat)){
             let temp = list[beginningIndex]
             list[beginningIndex] = list[endingIndex]
             list[endingIndex] = temp
@@ -83,16 +83,15 @@ func sortList(_list: [Enemy]) -> [Enemy]{
     }
     
     //Insertion Sort
-    for j in 1...list.count - 1 {
-        let key = list[j].attackStat + list[j].defenseStat
-        var i = j - 1
+    for i in 1...list.count - 1 {
+        let key = list[i]
+        var j = i - 1
         
-        while(i >= 0 && (list[j].attackStat + list[j].defenseStat) > key){
-            list[i + 1] = list[i]
-            i = i - 1
+        while(j >= 0 && (list[j].baseAttackStat + list[j].baseDefenseStat) > (key.baseAttackStat + key.baseDefenseStat)){
+            list[j + 1] = list[j]
+            j = j - 1
         }
-        
-        list[i + 1] = list[j]
+        list[j + 1] = key
     }
     return list
 }

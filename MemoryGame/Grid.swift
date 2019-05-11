@@ -50,7 +50,16 @@ class Grid:SKSpriteNode {
             bezierPath.addLine(to: CGPoint(x: size.width, y: y))
         }
         
-        SKColor.gray.setStroke()
+        if (CharacterSelection.selectedCharacter.name == CharacterSelection.shou.name){
+            SKColor.yellow.setStroke()
+        }
+        else if (CharacterSelection.selectedCharacter.name == CharacterSelection.rikko.name){
+            SKColor.red.setStroke()
+        }
+        else {
+            SKColor.blue.setStroke()
+        }
+
         bezierPath.lineWidth = 2.0
         bezierPath.stroke()
         context.addPath(bezierPath.cgPath)

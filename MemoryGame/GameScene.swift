@@ -42,11 +42,10 @@ class GameScene: SKScene {
     
     var enemySprite = SKSpriteNode()
     
-    public var playerStats: Player!
-    public var enemyStats: Enemy!
-
+    var playerStats: Player! = nil
+    var enemyStats: Enemy! = nil
     
-    var tapObject = SKSpriteNode()
+    var tapObject = SKSpriteNode(imageNamed:"tap_effect_0")
     var tapAnimation = SKAction()
 
     let playerController = PlayerController()
@@ -58,12 +57,10 @@ class GameScene: SKScene {
         GameScene.tiles = [Tile]()
         GameScene.pairedTiles = [SKNode]()
         
-        enemyList = [Enemy]()
-    
         setupUI()
         setupCharacters()
         
-        grid = Grid(blockSize: 40.0, rows:rows, cols:cols)!
+        grid = Grid(blockSize: 50, rows:rows, cols:cols)!
         grid.position = CGPoint (x:frame.midX, y:frame.midY/2)
         grid.zPosition = 3
         
@@ -71,6 +68,7 @@ class GameScene: SKScene {
         addChild(grid)
         
         Grid.chosenPairs.removeAll()
+        
         
         GameScene.matches = 0
         
@@ -134,7 +132,7 @@ class GameScene: SKScene {
         addChild(goldCounterLabel)
         
         potionButton.zPosition = 3
-        potionButton.position = CGPoint(x: frame.size.width/1.15, y: frame.size.height/2.5)
+        potionButton.position = CGPoint(x: frame.size.width/1.12, y: frame.size.height/2.5)
         addChild(potionButton)
         
         var tapAnimationTextures = [SKTexture]()
@@ -200,7 +198,6 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         if (GameScene.turns <= 0){
-            
             playerTurnEnded()
             playerStats.revertToBaseValues()
             
@@ -218,8 +215,6 @@ class GameScene: SKScene {
         } else if (playerStats.health <= 0){
             healthBarAmount.xScale = 0/CGFloat(playerStats.maxHealth)
             GameScene.gameStarted = false
-            
-            
         }
         
         if (enemyStats.health > 0){
@@ -272,19 +267,19 @@ class GameScene: SKScene {
         print("Player Defense Stat: \(playerStats.defenseStat)")
         
         let damage = (playerStats.attackStat - (playerStats.attackStat * (enemyStats.defenseStat/100)))
+        
         enemyStats.health -= damage
         
         damageCounterLabel.text = "\(damage)"
         damageCounterLabel.position = enemySprite.position
         addChild(damageCounterLabel)
         
-        let wait = SKAction.wait(forDuration: 3)
+        let wait = SKAction.wait(forDuration: 1.5)
         let run = SKAction.run {
             self.damageCounterLabel.removeFromParent()
             if (self.enemyStats.health <= 0){
                 GameScene.gameStarted = false
                 print ("You win!")
-                
                 let enemyDeathSpriteAnimation = SKAction.animate (with: self.enemyDeathAnimationTextures, timePerFrame: 0.3)
                 
                 self.enemySprite.run(enemyDeathSpriteAnimation, completion: {
@@ -294,11 +289,8 @@ class GameScene: SKScene {
                     if (self.enemyList.count > 0){
                         self.generateEnemies()
                     } else {
-                        self.enemyList.removeAll() //Removes any remaining monsters from a previous level if there is any.
                         self.grid.removeAllChildren()
                         self.removeAllChildren()
-                        
-                        self.enemyStats = nil //Might fix bug where enemies appear with very little health in Level 3.
                         
                         let levelCompletionScene = LevelCompletionScene(size: (self.view?.bounds.size)!)
                         let transition = SKTransition.flipVertical(withDuration: 1.0)
@@ -327,7 +319,7 @@ class GameScene: SKScene {
         damageCounterLabel.text = "\(damage)"
         damageCounterLabel.position = playerSprite.position
         addChild(damageCounterLabel)
-        let wait = SKAction.wait(forDuration: 3)
+        let wait = SKAction.wait(forDuration: 1.5)
         let run = SKAction.run {
             self.damageCounterLabel.removeFromParent()
             
@@ -335,9 +327,7 @@ class GameScene: SKScene {
                 self.enemyList.removeAll() //Removes any remaining monsters from a previous level if there is any.
                 self.grid.removeAllChildren()
                 self.removeAllChildren()
-                
-                self.enemyStats = nil //Might fix bug where enemies appear with very little health in Level 3.
-                
+
                 let gameOverScene = GameOverScene(size: (self.view?.bounds.size)!)
                 let transition = SKTransition.flipVertical(withDuration: 1.0)
                 gameOverScene.scaleMode = SKSceneScaleMode.aspectFill
@@ -370,7 +360,6 @@ class GameScene: SKScene {
         }
     
         for counter in 1...4{
-            
             let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count - 1))) + 1
             
             let moveTile = Tile(row: 0, col: 0, id: 0, effectId: counter, character: CharacterSelection.selectedCharacter.name, tile: characterTileArray[counter - 1], tileType: TileType.Move)
@@ -404,6 +393,7 @@ class GameScene: SKScene {
     
     func initializeEnemies(){
         var tempList = [Enemy]()
+        enemyList = [Enemy]()
         
         tempList.append(Enemies.byr)
         tempList.append(Enemies.khyr)
@@ -421,21 +411,32 @@ class GameScene: SKScene {
         tempList.append(Enemies.prysm)
         tempList.append(Enemies.polymorph)
         tempList.append(Enemies.spark)
+        
         tempList.shuffle()
         
-        let numberOfEnemies = Int(arc4random_uniform(8)) + 2
+        let numberOfEnemies = Int(arc4random_uniform(8)) + 3
         
         for i in 0...numberOfEnemies - 1 {
             enemyList.append(tempList[Int(i)])
         }
+
+        enemyList = sortList(_list: enemyList)
         
         print("Number of Enemies: \(numberOfEnemies)")
-        
-        enemyList = sortList(_list: enemyList)
     }
     
     func generateEnemies(){
         enemyStats = enemyList[0]
+        for enemy in enemyList{
+            print("Current Enemies: \(enemy.enemyName)")
+        }
+
+        print("Next Enemy: \(enemyStats.enemyName)")
+        
+        
+        if (enemyStats.health < 0){
+            enemyStats.health = enemyStats.maxHealth
+        }
         enemySprite = SKSpriteNode(imageNamed: "spr_\(enemyStats.enemyName)_idle_0")
         
         var enemyIdleAnimationTextures = [SKTexture]()
@@ -457,7 +458,6 @@ class GameScene: SKScene {
         enemySprite.zPosition = 5
         
         addChild(enemySprite)
-        
     }
     
     func generateGridContents(revealTiles: Bool){
@@ -477,7 +477,7 @@ class GameScene: SKScene {
                     tileSprite = SKSpriteNode(texture: GameScene.defaultTile)
                 }
                 
-                tileSprite.setScale(1)
+                tileSprite.setScale(1.3)
                 tileSprite.zPosition = 3
                 tileSprite.position = grid.gridPosition(row: x-1, col: y)
                 grid.addChild(tileSprite)
