@@ -48,8 +48,11 @@ class GameScene: SKScene {
     var tapObject = SKSpriteNode(imageNamed:"tap_effect_0")
     var tapAnimation = SKAction()
 
-    let playerController = PlayerController()
+    let attackNameFrame = SKSpriteNode(imageNamed: "Attack_Name_Frame")
+    var attackNameLabel = SKLabelNode(fontNamed: "Eight Bit Dragon")
     
+    let playerController = PlayerController()
+
     override func didMove(to view: SKView) {
         
         playerStats = CharacterSelection.selectedCharacter
@@ -88,8 +91,8 @@ class GameScene: SKScene {
             background_upper = SKSpriteNode(imageNamed: "crystalCave_top")
         }
         else if (GameViewController.currentLevel == 2){
-            background_lower = SKSpriteNode(imageNamed: "darkForest_bottom")
-            background_upper = SKSpriteNode(imageNamed: "darkForest_top")
+            background_lower = SKSpriteNode(imageNamed: "templeOfXartha_bottom")
+            background_upper = SKSpriteNode(imageNamed: "templeOfXartha_top")
         }
         else {
             background_lower = SKSpriteNode(imageNamed: "darkForest_bottom")
