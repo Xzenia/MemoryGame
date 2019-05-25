@@ -442,6 +442,7 @@ class GameScene: SKScene {
         tempList.append(Enemies.prysm)
         tempList.append(Enemies.polymorph)
         tempList.append(Enemies.spark)
+        tempList.append(Enemies.tsanak)
         
         tempList.shuffle()
         
