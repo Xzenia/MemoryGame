@@ -18,7 +18,7 @@ class Enemies {
     public static var tikbalang = Enemy(_enemyName: "tikbalang", _baseAttackStat: 30, _baseDefenseStat: 20, _maxHealth: 200, _idleAnimationFrames: 8, _deathAnimationFrames: 7)
     public static var kyub = Enemy(_enemyName: "kyub", _baseAttackStat: 10, _baseDefenseStat: 8, _maxHealth: 120, _idleAnimationFrames: 6, _deathAnimationFrames: 10)
     public static var kown = Enemy(_enemyName: "kown", _baseAttackStat: 8, _baseDefenseStat: 10, _maxHealth: 70, _idleAnimationFrames: 5, _deathAnimationFrames: 8)
-    
+    public static var tsanak = Enemy(_enemyName: "tsanak", _baseAttackStat: 6, _baseDefenseStat: 6, _maxHealth: 90, _idleAnimationFrames: 7, _deathAnimationFrames: 8)
 
     public static var enemyList = [Enemy]()
     
