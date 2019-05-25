@@ -44,21 +44,21 @@ class CharacterSelection: SKScene {
         if let touch = touches.first {
             if shouSprite.contains(touch.location(in: self)){
                 CharacterSelection.selectedCharacter = CharacterSelection.shou
-                goToStoryScene()
+                goToGameScene()
             }
             else if (rikkoSprite.contains(touch.location(in: self))){
                 CharacterSelection.selectedCharacter = CharacterSelection.rikko
-                goToStoryScene()
+                goToGameScene()
             }
             else if (emilySprite.contains(touch.location(in: self))){
                 CharacterSelection.selectedCharacter = CharacterSelection.emily
-                goToStoryScene()
+                goToGameScene()
             }
         }
     }
     
-    func goToStoryScene(){
-        let scene = StoryScene(size: (view?.bounds.size)!)
+    func goToGameScene(){
+        let scene = GameScene(size: (view?.bounds.size)!)
         let transition = SKTransition.flipVertical(withDuration: 1.0)
         scene.scaleMode = SKSceneScaleMode.aspectFill
         view?.presentScene(scene, transition: transition)

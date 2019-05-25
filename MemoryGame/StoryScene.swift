@@ -39,7 +39,7 @@ class StoryScene: SKScene {
                 slideViewer.texture = slides[currentSlide]
                 currentSlide = currentSlide + 1
             } else {
-                let scene = GameScene(size: (view?.bounds.size)!)
+                let scene = CharacterSelection(size: (view?.bounds.size)!)
                 let transition = SKTransition.flipVertical(withDuration: 1.0)
                 scene.scaleMode = SKSceneScaleMode.aspectFill
                 view?.presentScene(scene, transition: transition)
