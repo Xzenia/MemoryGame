@@ -22,9 +22,10 @@ class GameScene: SKScene {
     let cols: Int = 5
     
     var grid : Grid!
-    
+
     var enemyDeathAnimationTextures = [SKTexture]()
     
+    var playerAttackAnimation = SKAction()
     //UI Elements
     let healthBar = SKSpriteNode(imageNamed: "health_bar")
     let healthBarAmount = SKSpriteNode(imageNamed: "health_bar_amount")
@@ -156,17 +157,22 @@ class GameScene: SKScene {
         playerSprite = SKSpriteNode(imageNamed: "spr_\(CharacterSelection.selectedCharacter.name)_idle_0")
         
         var playerSprites: [SKTexture] = []
+        var playerAttackSprites = [SKTexture]()
         
         playerSprite.position = CGPoint(x: frame.size.width/5, y: frame.size.height/1.35)
         playerSprite.zPosition = 5
         
-        if (CharacterSelection.selectedCharacter.animationFrame > 1){
-            for counter in 1...CharacterSelection.selectedCharacter.animationFrame {
-                playerSprites.append(SKTexture(imageNamed: "spr_\(CharacterSelection.selectedCharacter.name)_idle_\(counter)"))
-            }
-            let playerSpriteAnimation = SKAction.animate(with: playerSprites, timePerFrame: 0.2)
-            playerSprite.run(SKAction.repeatForever(playerSpriteAnimation))
+        for counter in 1...CharacterSelection.selectedCharacter.animationFrame {
+            playerSprites.append(SKTexture(imageNamed: "spr_\(CharacterSelection.selectedCharacter.name)_idle_\(counter)"))
         }
+        let playerSpriteAnimation = SKAction.animate(with: playerSprites, timePerFrame: 0.2)
+        playerSprite.run(SKAction.repeatForever(playerSpriteAnimation))
+        
+        for counter in 0...CharacterSelection.selectedCharacter.attackAnimationFrame{
+            playerAttackSprites.append(SKTexture(imageNamed: "spr_\(CharacterSelection.selectedCharacter.name)_Special_\(counter)"))
+        }
+        
+        playerAttackAnimation = SKAction.animate(with: playerAttackSprites, timePerFrame: 0.2)
         
         addChild(playerSprite)
         
@@ -239,6 +245,9 @@ class GameScene: SKScene {
     }
     
     func playerTurnEnded(){
+        
+        playerSprite.run(playerAttackAnimation)
+        
         for tile in GameScene.pairedTiles{
             let pairedTile = GameScene.tiles[Int(tile.name!)!]
             
@@ -263,9 +272,6 @@ class GameScene: SKScene {
                 playerStats.increaseDefenseStat(increase: move.defense)
             }
         }
-        
-        print("Player Attack Stat: \(playerStats.attackStat)")
-        print("Player Defense Stat: \(playerStats.defenseStat)")
         
         let damage = (playerStats.attackStat - (playerStats.attackStat * (enemyStats.defenseStat/100)))
         

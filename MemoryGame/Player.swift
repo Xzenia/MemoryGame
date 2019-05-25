@@ -26,7 +26,9 @@ struct Player {
     
     var animationFrame: Int
     
-    init(_name: String, _baseAttackStat: Float, _baseDefenseStat: Float, _maxHealth: Float, _animationFrame: Int) {
+    var attackAnimationFrame: Int
+    
+    init(_name: String, _baseAttackStat: Float, _baseDefenseStat: Float, _maxHealth: Float, _animationFrame: Int, _attackAnimationFrame: Int) {
         baseAttackStat = _baseAttackStat
         baseDefenseStat = _baseDefenseStat
         maxHealth = _maxHealth
@@ -38,6 +40,8 @@ struct Player {
         health = maxHealth
         attackStat = baseAttackStat
         defenseStat = baseDefenseStat
+        
+        attackAnimationFrame = _attackAnimationFrame
     }
     
     mutating func revertToBaseValues(){
