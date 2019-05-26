@@ -16,6 +16,9 @@ class StoryScene: SKScene {
     
     var currentSlide = 0
     
+    var tapObject = SKSpriteNode()
+    var tapAnimation = SKAction()
+    
     override func didMove(to view: SKView) {
         slides.append(SKTexture(imageNamed: "slide 1"))
         slides.append(SKTexture(imageNamed: "slide 2"))
@@ -31,10 +34,21 @@ class StoryScene: SKScene {
         
         addChild(slideViewer)
         
+        var tapAnimationTextures = [SKTexture]()
+        
+        for counter in 0...7{
+            tapAnimationTextures.append(SKTexture(imageNamed: "tap_effect_\(counter)"))
+        }
+        
+        tapObject.zPosition = 10
+        tapAnimation = SKAction.animate(with: tapAnimationTextures, timePerFrame: 0.05)
+        
+        addChild(tapObject)
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if touches.first != nil {
+        if let touch = touches.first {
             if (currentSlide < slides.count) {
                 slideViewer.texture = slides[currentSlide]
                 currentSlide = currentSlide + 1
@@ -44,6 +58,10 @@ class StoryScene: SKScene {
                 scene.scaleMode = SKSceneScaleMode.aspectFill
                 view?.presentScene(scene, transition: transition)
             }
+            
+            let position = touch.location(in:self)
+            tapObject.position = position
+            tapObject.run(tapAnimation)
             
         }
     }

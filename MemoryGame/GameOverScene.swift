@@ -20,6 +20,8 @@ class GameOverScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        backgroundColor = UIColor.black
+        
         gameOverMessage.fontSize = 20
         gameOverMessage.text = "You Died!"
         gameOverMessage.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2 + 200)

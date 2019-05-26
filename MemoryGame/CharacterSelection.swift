@@ -21,6 +21,9 @@ class CharacterSelection: SKScene {
     let emilySprite = SKSpriteNode(imageNamed: "spr_\(CharacterSelection.emily.name)_idle_0")
     
     override func didMove(to view: SKView) {
+        
+        backgroundColor = UIColor.black
+        
         shouSprite.position = CGPoint(x: frame.size.width/5, y: frame.size.height/2)
         shouSprite.zPosition = 3
         shouSprite.xScale = 1.5

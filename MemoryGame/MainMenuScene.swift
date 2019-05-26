@@ -16,6 +16,8 @@ class MainMenuScene: SKScene{
     var tapObject = SKSpriteNode(imageNamed: "tap_effect_0")
     var tapAnimation = SKAction()
     
+    let backgroundMusic = SKAudioNode(fileNamed: "Memoria-Arcanum.mp3")
+    
     override func didMove(to view: SKView) {
         
         title.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2 + 200)
@@ -36,6 +38,8 @@ class MainMenuScene: SKScene{
         tapAnimation = SKAction.animate(with: tapAnimationTextures, timePerFrame: 0.05)
         
         addChild(tapObject)
+        
+        addChild(backgroundMusic)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

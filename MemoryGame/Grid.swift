@@ -8,6 +8,9 @@ class Grid:SKSpriteNode {
     public static var chosenPairs = [SKNode]()
     public static var pairedTiles = [SKNode]() //Keeps track of all pairs of tiles 
     
+    let correctMatchSound = SKAction.playSoundFileNamed("Correct.wav", waitForCompletion: false)
+    let wrongMatchSound = SKAction.playSoundFileNamed("WrongMatch.wav", waitForCompletion: false)
+    
     convenience init?(blockSize:CGFloat,rows:Int,cols:Int) {
         guard let texture = Grid.gridTexture(blockSize: blockSize,rows: rows, cols:cols) else {
             return nil
@@ -103,6 +106,8 @@ class Grid:SKSpriteNode {
                         Grid.pairedTiles.append(Grid.chosenPairs[0])
                         Grid.pairedTiles.append(Grid.chosenPairs[1])
                         
+                        run(correctMatchSound)
+                        
                         GameScene.turns -= 1
                         GameScene.matches += 1
                     
@@ -110,7 +115,8 @@ class Grid:SKSpriteNode {
 
                     } else {
                         print("Both tiles are not similar!")
-                        
+                        run(wrongMatchSound)
+
                         GameScene.turns -= 1
                         print("Turns: \(GameScene.turns)")
                         
@@ -118,12 +124,12 @@ class Grid:SKSpriteNode {
                         let chosenNode2 = Grid.chosenPairs[1]
                         
                         let wait = SKAction.wait(forDuration: 0.5)
-                        let run = SKAction.run {
+                        let setTilesToDefault = SKAction.run {
                             chosenNode1.run(setToDefaultTile)
                             chosenNode2.run(setToDefaultTile)
 
                         }
-                        self.run(SKAction.sequence([wait, run]))
+                        self.run(SKAction.sequence([wait, setTilesToDefault]))
                     }
                     
                     Grid.chosenPairs.removeAll()

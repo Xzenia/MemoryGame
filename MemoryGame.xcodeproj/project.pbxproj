@@ -24,6 +24,14 @@
 		E59716D22273586600939FCF /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59716D12273586600939FCF /* Move.swift */; };
 		E59716D42273588200939FCF /* Movesets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59716D32273588200939FCF /* Movesets.swift */; };
 		E59716D62273589F00939FCF /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59716D52273589F00939FCF /* PlayerController.swift */; };
+		E59DAC0B229A2265006A594E /* EndingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59DAC0A229A2265006A594E /* EndingScene.swift */; };
+		E59DAC0E229A2F83006A594E /* Correct.wav in Resources */ = {isa = PBXBuildFile; fileRef = E59DAC0D229A2F83006A594E /* Correct.wav */; };
+		E59DAC10229A2F8E006A594E /* Hurt.wav in Resources */ = {isa = PBXBuildFile; fileRef = E59DAC0F229A2F8E006A594E /* Hurt.wav */; };
+		E59DAC12229A2F97006A594E /* MagicAttack.wav in Resources */ = {isa = PBXBuildFile; fileRef = E59DAC11229A2F97006A594E /* MagicAttack.wav */; };
+		E59DAC14229A2FA7006A594E /* SpellAttack.wav in Resources */ = {isa = PBXBuildFile; fileRef = E59DAC13229A2FA7006A594E /* SpellAttack.wav */; };
+		E59DAC16229A2FBD006A594E /* EnemyDamage.wav in Resources */ = {isa = PBXBuildFile; fileRef = E59DAC15229A2FBD006A594E /* EnemyDamage.wav */; };
+		E59DAC18229A31DB006A594E /* Mus_ChaosTheory.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = E59DAC17229A31DB006A594E /* Mus_ChaosTheory.mp3 */; };
+		E59DAC1A229A3A7B006A594E /* WrongMatch.wav in Resources */ = {isa = PBXBuildFile; fileRef = E59DAC19229A3A7B006A594E /* WrongMatch.wav */; };
 		E5A96FBD22360F3C0031657D /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A96FBC22360F3C0031657D /* Enemy.swift */; };
 		E5C4011E227D05E100D2086F /* LevelCompletionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C4011D227D05E100D2086F /* LevelCompletionScene.swift */; };
 		E5CF0E7C2284DE95006E7112 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CF0E7B2284DE95006E7112 /* GameOverScene.swift */; };
@@ -75,6 +83,14 @@
 		E59716D12273586600939FCF /* Move.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		E59716D32273588200939FCF /* Movesets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Movesets.swift; sourceTree = "<group>"; };
 		E59716D52273589F00939FCF /* PlayerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
+		E59DAC0A229A2265006A594E /* EndingScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndingScene.swift; sourceTree = "<group>"; };
+		E59DAC0D229A2F83006A594E /* Correct.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Correct.wav; sourceTree = "<group>"; };
+		E59DAC0F229A2F8E006A594E /* Hurt.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Hurt.wav; sourceTree = "<group>"; };
+		E59DAC11229A2F97006A594E /* MagicAttack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = MagicAttack.wav; sourceTree = "<group>"; };
+		E59DAC13229A2FA7006A594E /* SpellAttack.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = SpellAttack.wav; sourceTree = "<group>"; };
+		E59DAC15229A2FBD006A594E /* EnemyDamage.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = EnemyDamage.wav; sourceTree = "<group>"; };
+		E59DAC17229A31DB006A594E /* Mus_ChaosTheory.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Mus_ChaosTheory.mp3; sourceTree = "<group>"; };
+		E59DAC19229A3A7B006A594E /* WrongMatch.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = WrongMatch.wav; sourceTree = "<group>"; };
 		E5A96FBC22360F3C0031657D /* Enemy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		E5C4011D227D05E100D2086F /* LevelCompletionScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelCompletionScene.swift; sourceTree = "<group>"; };
 		E5CF0E7B2284DE95006E7112 /* GameOverScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
@@ -113,6 +129,7 @@
 		E5018F50229980CC00C9A503 /* Music */ = {
 			isa = PBXGroup;
 			children = (
+				E59DAC17229A31DB006A594E /* Mus_ChaosTheory.mp3 */,
 				E5018F51229980D700C9A503 /* Memoria-Arcanum.mp3 */,
 			);
 			name = Music;
@@ -141,6 +158,7 @@
 		E508E73F22262E3400145551 /* MemoryGame */ = {
 			isa = PBXGroup;
 			children = (
+				E59DAC0C229A2F2E006A594E /* SFX */,
 				E5018F50229980CC00C9A503 /* Music */,
 				E5C4011F227D05EF00D2086F /* Controller */,
 				E5DC8ECD2227F0C300780D2A /* Fonts */,
@@ -172,6 +190,19 @@
 				E508E76822262E3400145551 /* Info.plist */,
 			);
 			path = MemoryGameUITests;
+			sourceTree = "<group>";
+		};
+		E59DAC0C229A2F2E006A594E /* SFX */ = {
+			isa = PBXGroup;
+			children = (
+				E59DAC0F229A2F8E006A594E /* Hurt.wav */,
+				E59DAC15229A2FBD006A594E /* EnemyDamage.wav */,
+				E59DAC13229A2FA7006A594E /* SpellAttack.wav */,
+				E59DAC11229A2F97006A594E /* MagicAttack.wav */,
+				E59DAC19229A3A7B006A594E /* WrongMatch.wav */,
+				E59DAC0D229A2F83006A594E /* Correct.wav */,
+			);
+			name = SFX;
 			sourceTree = "<group>";
 		};
 		E5C4011F227D05EF00D2086F /* Controller */ = {
@@ -215,6 +246,7 @@
 				E5C4011D227D05E100D2086F /* LevelCompletionScene.swift */,
 				E5CF0E7B2284DE95006E7112 /* GameOverScene.swift */,
 				E55FC1B922925239009157EE /* StoryScene.swift */,
+				E59DAC0A229A2265006A594E /* EndingScene.swift */,
 			);
 			name = Scene;
 			sourceTree = "<group>";
@@ -327,10 +359,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E59DAC14229A2FA7006A594E /* SpellAttack.wav in Resources */,
 				E5018F52229980D700C9A503 /* Memoria-Arcanum.mp3 in Resources */,
+				E59DAC0E229A2F83006A594E /* Correct.wav in Resources */,
 				E508E74C22262E3400145551 /* Main.storyboard in Resources */,
 				E508E74E22262E3400145551 /* Assets.xcassets in Resources */,
+				E59DAC12229A2F97006A594E /* MagicAttack.wav in Resources */,
 				E5D5BAB92228050B0098E45A /* Eightbitdragon.otf in Resources */,
+				E59DAC10229A2F8E006A594E /* Hurt.wav in Resources */,
+				E59DAC1A229A3A7B006A594E /* WrongMatch.wav in Resources */,
+				E59DAC18229A31DB006A594E /* Mus_ChaosTheory.mp3 in Resources */,
+				E59DAC16229A2FBD006A594E /* EnemyDamage.wav in Resources */,
 				E508E75122262E3400145551 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -371,6 +410,7 @@
 				E508E77722262F5C00145551 /* Tile.swift in Sources */,
 				E5A96FBD22360F3C0031657D /* Enemy.swift in Sources */,
 				E57DEAF3223114970071B512 /* Player.swift in Sources */,
+				E59DAC0B229A2265006A594E /* EndingScene.swift in Sources */,
 				E508E74122262E3400145551 /* AppDelegate.swift in Sources */,
 				E5D328EF2243444B00F69E88 /* CharacterSelection.swift in Sources */,
 				E508E77522262F4600145551 /* Grid.swift in Sources */,

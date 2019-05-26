@@ -56,9 +56,14 @@ class GameScene: SKScene {
     var attackNameLabel = SKLabelNode(fontNamed: "Eight Bit Dragon")
     
     let playerController = PlayerController()
-
+    //Sound
+    let backgroundMusic = SKAudioNode(fileNamed: "Mus_ChaosTheory.mp3")
+    let hurtSound = SKAction.playSoundFileNamed("Hurt.wav", waitForCompletion: false)
+    let normalAttackSound = SKAction.playSoundFileNamed("SpellAttack.wav", waitForCompletion: false)
+    let magicAttackSound = SKAction.playSoundFileNamed("MagicAttack.wav", waitForCompletion: false)
+    let enemyAttackSound = SKAction.playSoundFileNamed("EnemyDamage.wav", waitForCompletion: false)
+    
     override func didMove(to view: SKView) {
-        
         playerStats = CharacterSelection.selectedCharacter
         
         GameScene.tiles = [Tile]()
@@ -79,10 +84,11 @@ class GameScene: SKScene {
         GameScene.matches = 0
         
         scene?.scaleMode = SKSceneScaleMode.resizeFill
+        
+        addChild(backgroundMusic)
     }
     
     func setupUI(){
-        
         var background_lower = SKSpriteNode()
         var background_upper = SKSpriteNode()
         
@@ -159,8 +165,6 @@ class GameScene: SKScene {
         
         damageCounterLabel.fontSize = 12
         damageCounterLabel.zPosition = 10
-        
-        print("Current Level: \(GameViewController.currentLevel)")
     }
     
     func setupCharacters(){
@@ -260,7 +264,6 @@ class GameScene: SKScene {
     }
     
     func playerTurnEnded(){
-        
         for tile in GameScene.pairedTiles{
             let pairedTile = GameScene.tiles[Int(tile.name!)!]
             
@@ -282,7 +285,6 @@ class GameScene: SKScene {
             }
             else if (pairedTile.tileType == TileType.Move){
                 let move = playerController.generateMove(pairedTile: pairedTile)
-                print("Move name: \(move.name)")
                 playerStats.increaseAttackStat(increase: move.attack)
                 playerStats.increaseDefenseStat(increase: move.defense)
             }
@@ -295,7 +297,6 @@ class GameScene: SKScene {
             self.damageCounterLabel.removeFromParent()
             if (self.enemyStats.health <= 0){
                 GameScene.gameStarted = false
-                print ("You win!")
                 let enemyDeathSpriteAnimation = SKAction.animate (with: self.enemyDeathAnimationTextures, timePerFrame: 0.2)
                 
                 self.enemySprite.run(enemyDeathSpriteAnimation, completion: {
@@ -308,10 +309,7 @@ class GameScene: SKScene {
                         self.grid.removeAllChildren()
                         self.removeAllChildren()
                         
-                        let levelCompletionScene = LevelCompletionScene(size: (self.view?.bounds.size)!)
-                        let transition = SKTransition.flipVertical(withDuration: 1.0)
-                        levelCompletionScene.scaleMode = SKSceneScaleMode.aspectFill
-                        self.view?.presentScene(levelCompletionScene, transition: transition)
+                        self.levelIsComplete()
                     }
                 })
             }
@@ -322,6 +320,12 @@ class GameScene: SKScene {
             if (self.enemyStats.health > 0){
                 self.beginEnemyTurn()
             }
+        }
+        
+        if (CharacterSelection.selectedCharacter.name == CharacterSelection.rikko.name){
+            playerSprite.run(magicAttackSound)
+        } else{
+            playerSprite.run(normalAttackSound)
         }
         
         playerSprite.run(playerAttackAnimation, completion: {
@@ -340,8 +344,10 @@ class GameScene: SKScene {
     }
     
     func beginEnemyTurn(){
-        
+    
         let damage = (enemyStats.attackStat - (enemyStats.attackStat * (playerStats.defenseStat/100)))
+        enemySprite.run(enemyAttackSound)
+        
         playerStats.health -= damage
         damageCounterLabel.text = "\(damage)"
         damageCounterLabel.position = playerSprite.position
@@ -453,18 +459,10 @@ class GameScene: SKScene {
         }
 
         enemyList = sortList(_list: enemyList)
-        
-        print("Number of Enemies: \(numberOfEnemies)")
     }
     
     func generateEnemies(){
         enemyStats = enemyList[0]
-        for enemy in enemyList{
-            print("Current Enemies: \(enemy.enemyName)")
-        }
-
-        print("Next Enemy: \(enemyStats.enemyName)")
-        
         
         if (enemyStats.health < 0){
             enemyStats.health = enemyStats.maxHealth
@@ -526,5 +524,19 @@ class GameScene: SKScene {
             }
             x = x + 1
         }
+    }
+    
+    func levelIsComplete(){
+        let levelCompletionScene: SKScene!
+        
+        if (GameViewController.currentLevel < 2){
+            levelCompletionScene = LevelCompletionScene(size: (self.view?.bounds.size)!)
+        } else {
+            levelCompletionScene = EndingScene(size: (self.view?.bounds.size)!)
+        }
+        
+        let transition = SKTransition.flipVertical(withDuration: 1.0)
+        levelCompletionScene.scaleMode = SKSceneScaleMode.aspectFill
+        self.view?.presentScene(levelCompletionScene, transition: transition)
     }
  }
