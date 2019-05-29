@@ -41,6 +41,8 @@ class CharacterSelection: SKScene {
         emilySprite.xScale = 1.5
         emilySprite.yScale = 1.5
         addChild(emilySprite)
+        
+    
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

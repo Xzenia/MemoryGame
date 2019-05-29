@@ -9,8 +9,8 @@ class EndingScene: SKScene{
     
     override func didMove(to view: SKView) {
         slideViewer.position = CGPoint(x: frame.midX, y: frame.midY)
-        slideViewer.xScale = 1.4
-        slideViewer.yScale = 1.4
+        slideViewer.xScale = 1.5
+        slideViewer.yScale = 1.5
         addChild(slideViewer)
         
         var tapAnimationTextures = [SKTexture]()
@@ -23,12 +23,16 @@ class EndingScene: SKScene{
         tapAnimation = SKAction.animate(with: tapAnimationTextures, timePerFrame: 0.05)
         
         addChild(tapObject)
+    
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             let scene = MainMenuScene(size: (view?.bounds.size)!)
             let transition = SKTransition.flipVertical(withDuration: 1.0)
+            
+            GameViewController.currentLevel = 0
+            
             scene.scaleMode = SKSceneScaleMode.aspectFill
             view?.presentScene(scene, transition: transition)
         

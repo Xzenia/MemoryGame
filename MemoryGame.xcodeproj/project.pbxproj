@@ -573,7 +573,7 @@
 				INFOPLIST_FILE = MemoryGame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = HumdrumStudios.MemoryGame;
+				PRODUCT_BUNDLE_IDENTIFIER = HumdrumStudios.MemoriaArcanum;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -590,7 +590,7 @@
 				INFOPLIST_FILE = MemoryGame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = HumdrumStudios.MemoryGame;
+				PRODUCT_BUNDLE_IDENTIFIER = HumdrumStudios.MemoriaArcanum;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;

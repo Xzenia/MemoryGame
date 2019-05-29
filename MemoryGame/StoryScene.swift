@@ -28,8 +28,8 @@ class StoryScene: SKScene {
         slides.append(SKTexture(imageNamed: "slide 6"))
     
         slideViewer.position = CGPoint(x: frame.midX, y: frame.midY)
-        slideViewer.xScale = 1.4
-        slideViewer.yScale = 1.4
+        slideViewer.xScale = 1.5
+        slideViewer.yScale = 1.5
         slideViewer.texture = slides[currentSlide]
         
         addChild(slideViewer)

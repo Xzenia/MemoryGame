@@ -19,6 +19,7 @@ class MainMenuScene: SKScene{
     let backgroundMusic = SKAudioNode(fileNamed: "Memoria-Arcanum.mp3")
     
     override func didMove(to view: SKView) {
+        backgroundColor = UIColor.black
         
         title.position = CGPoint(x: frame.size.width/2, y: frame.size.height/2 + 200)
         title.xScale = 1.5

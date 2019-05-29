@@ -24,7 +24,7 @@ class GameScene: SKScene {
     let cols: Int = 5
     
     var grid : Grid!
-
+    
     var enemyDeathAnimationTextures = [SKTexture]()
     
     var playerAttackAnimation = SKAction()
@@ -51,7 +51,7 @@ class GameScene: SKScene {
     
     var tapObject = SKSpriteNode(imageNamed:"tap_effect_0")
     var tapAnimation = SKAction()
-
+    
     let attackNameFrame = SKSpriteNode(imageNamed: "Attack_Name_Frame")
     var attackNameLabel = SKLabelNode(fontNamed: "Eight Bit Dragon")
     
@@ -73,7 +73,7 @@ class GameScene: SKScene {
         setupCharacters()
         
         grid = Grid(blockSize: 50, rows:rows, cols:cols)!
-        grid.position = CGPoint (x:frame.midX - 25, y:frame.midY/2)
+        grid.position = CGPoint (x:frame.midX - 38, y:frame.midY/2)
         grid.zPosition = 3
         
         setupGrid()
@@ -82,6 +82,7 @@ class GameScene: SKScene {
         Grid.chosenPairs.removeAll()
         
         GameScene.matches = 0
+        GameScene.potionCount = 3
         
         scene?.scaleMode = SKSceneScaleMode.resizeFill
         
@@ -121,13 +122,13 @@ class GameScene: SKScene {
         background_upper.zPosition = 0
         addChild(background_upper)
         
-        healthBar.position = CGPoint(x: frame.size.width / 3, y: frame.size.height/2)
+        healthBar.position = CGPoint(x: frame.size.width / 3.2, y: frame.size.height/2)
         healthBar.zPosition = 4
         addChild(healthBar)
         
         healthBarAmount.zPosition = 3
         healthBarAmount.xScale = CGFloat(playerStats.health) / CGFloat(playerStats.maxHealth)
-        healthBarAmount.position = CGPoint(x: frame.size.width / 15, y: frame.size.height/2)
+        healthBarAmount.position = CGPoint(x: frame.size.width / 14, y: frame.size.height/2)
         healthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(healthBarAmount)
         
@@ -139,7 +140,7 @@ class GameScene: SKScene {
         goldCounterLabel.position = CGPoint (x: frame.size.width/1.10, y: frame.size.height/2.08)
         goldCounterLabel.fontSize = 26
         goldCounterLabel.text = String(GameScene.matches)
-        goldCounterLabel.fontColor = UIColor.black
+        goldCounterLabel.fontColor = UIColor.white
         addChild(goldCounterLabel)
         
         potionButton.zPosition = 3
@@ -149,7 +150,7 @@ class GameScene: SKScene {
         potionCountLabel.zPosition = 3
         potionCountLabel.position = CGPoint(x: potionButton.position.x - 20, y: potionButton.position.y + 20)
         potionCountLabel.text = "\(GameScene.potionCount)"
-        potionCountLabel.fontSize = 12
+        potionCountLabel.fontSize = 18
         potionCountLabel.color = UIColor.white
         addChild(potionCountLabel)
         
@@ -165,6 +166,7 @@ class GameScene: SKScene {
         
         damageCounterLabel.fontSize = 12
         damageCounterLabel.zPosition = 10
+        damageCounterLabel.fontColor = UIColor.white
     }
     
     func setupCharacters(){
@@ -193,13 +195,13 @@ class GameScene: SKScene {
         initializeEnemies()
         generateEnemies()
         
-        enemyHealthBar.position = CGPoint(x: frame.size.width/2, y: frame.size.height - 20)
+        enemyHealthBar.position = CGPoint(x: frame.size.width/2.1, y: frame.size.height - 20)
         enemyHealthBar.zPosition = 4
         addChild(enemyHealthBar)
         
         enemyHealthBarAmount.zPosition = 3
         enemyHealthBarAmount.xScale = CGFloat(enemyStats.health) / CGFloat(enemyStats.maxHealth)
-        enemyHealthBarAmount.position = CGPoint(x: enemyHealthBar.position.x/2.1, y: enemyHealthBar.position.y)
+        enemyHealthBarAmount.position = CGPoint(x: enemyHealthBar.position.x/2.05, y: enemyHealthBar.position.y)
         enemyHealthBarAmount.anchorPoint = CGPoint(x: 0.0, y: 0.5)
         addChild(enemyHealthBarAmount)
     }
@@ -232,7 +234,11 @@ class GameScene: SKScene {
         }
         
         if (playerStats.health > 0){
-            healthBarAmount.xScale = CGFloat(playerStats.health)/CGFloat(playerStats.maxHealth)
+            if (playerStats.health > playerStats.maxHealth){
+                healthBarAmount.xScale = CGFloat(playerStats.maxHealth)/CGFloat(playerStats.maxHealth)
+            } else {
+                healthBarAmount.xScale = CGFloat(playerStats.health)/CGFloat(playerStats.maxHealth)
+            }
         } else if (playerStats.health <= 0){
             healthBarAmount.xScale = 0/CGFloat(playerStats.maxHealth)
             GameScene.gameStarted = false
@@ -270,17 +276,13 @@ class GameScene: SKScene {
             if (pairedTile.tileType == TileType.Item){
                 switch pairedTile.effectId {
                 case 1:
-                    playerStats.increaseHealth(increase: 10)
+                    playerStats.increaseHealth(increase: 30)
                 case 2:
                     playerStats.increaseHealth(increase: 20)
                 case 3:
-                    playerStats.increaseHealth(increase: 30)
-                case 4:
-                    playerStats.increaseHealth(increase: 40)
-                case 5:
                     GameScene.potionCount = GameScene.potionCount + 1
                 default:
-                    playerStats.increaseHealth(increase: 10)
+                    playerStats.increaseHealth(increase: 50)
                 }
             }
             else if (pairedTile.tileType == TileType.Move){
@@ -344,7 +346,7 @@ class GameScene: SKScene {
     }
     
     func beginEnemyTurn(){
-    
+        
         let damage = (enemyStats.attackStat - (enemyStats.attackStat * (playerStats.defenseStat/100)))
         enemySprite.run(enemyAttackSound)
         
@@ -360,7 +362,7 @@ class GameScene: SKScene {
                 self.enemyList.removeAll() //Removes any remaining monsters from a previous level if there is any.
                 self.grid.removeAllChildren()
                 self.removeAllChildren()
-
+                
                 let gameOverScene = GameOverScene(size: (self.view?.bounds.size)!)
                 let transition = SKTransition.flipVertical(withDuration: 1.0)
                 gameOverScene.scaleMode = SKSceneScaleMode.aspectFill
@@ -390,9 +392,9 @@ class GameScene: SKScene {
             print("GenerateTiles() switch case defaulted!")
             characterTileArray = Tiles.shouTiles
         }
-    
+        
         for counter in 1...4{
-            let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count - 1))) + 1
+            let chosenHealingTile = Int(arc4random_uniform(UInt32(Tiles.healingTiles.count)))
             
             let moveTile = Tile(row: 0, col: 0, id: 0, effectId: counter, character: CharacterSelection.selectedCharacter.name, tile: characterTileArray[counter - 1], tileType: TileType.Move)
             let healingTile  = Tile(row: 0, col: 0, id: 0, effectId: chosenHealingTile, character: "", tile: Tiles.healingTiles[chosenHealingTile], tileType: TileType.Item)
@@ -405,7 +407,7 @@ class GameScene: SKScene {
         }
         
         if (arc4random_uniform(100) > 50){
-            let potionPickupTile = Tile(row: 0, col: 0, id: 0, effectId: 5, character: "", tile: Tiles.potionPickupTile, tileType: TileType.Item)
+            let potionPickupTile = Tile(row: 0, col: 0, id: 0, effectId: 3, character: "", tile: Tiles.potionPickupTile, tileType: TileType.Item)
             chosenTiles.append(potionPickupTile)
         }
         
@@ -457,7 +459,7 @@ class GameScene: SKScene {
         for i in 0...numberOfEnemies - 1 {
             enemyList.append(tempList[Int(i)])
         }
-
+        
         enemyList = sortList(_list: enemyList)
     }
     
@@ -539,4 +541,4 @@ class GameScene: SKScene {
         levelCompletionScene.scaleMode = SKSceneScaleMode.aspectFill
         self.view?.presentScene(levelCompletionScene, transition: transition)
     }
- }
+}

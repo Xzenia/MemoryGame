@@ -14,7 +14,7 @@ class Tiles{
     
     public static let emilyTiles = [SKTexture(imageNamed:"Arrow_Rain"), SKTexture(imageNamed:"Frost_Shot"), SKTexture(imageNamed: "Torrent_Shot"), SKTexture(imageNamed: "Holy_Arrow")]
     
-    public static let healingTiles = [SKTexture(imageNamed:"healing_tile_1"), SKTexture(imageNamed:"healing_tile_2"), SKTexture(imageNamed:"healing_tile_3"), SKTexture(imageNamed:"healing_tile_4")]
+    public static let healingTiles = [SKTexture(imageNamed:"healing_tile_1"), SKTexture(imageNamed:"healing_tile_2")]
     
     public static let potionPickupTile = SKTexture (imageNamed: "spr_potion_0")
 }
